@@ -3,6 +3,61 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
+* Detects search engine bots
+*
+* @since 0.1
+*
+* @returns bool true if search engine bot is visiting site, otherwise false.
+*/
+function swapper_is_bot() {
+$bot_agents = [
+    'Googlebot',
+    'Bingbot',
+    'Slurp',
+    'DuckDuckBot',
+    'Baiduspider',
+    'YandexBot',
+    'Sogou',
+    'Exabot',
+    'facebot',
+    'ia_archiver',
+    'AhrefsBot',
+    'MJ12bot',
+    'SemrushBot',
+    'DotBot',
+    'SeznamBot',
+    'PiplBot',
+    'Mail.RU_Bot',
+    'SiteExplorer',
+    'Screaming Frog',
+    'LinkpadBot',
+    'SerpstatBot',
+    'MegaIndex',
+    'BLEXBot',
+    'Uptimebot',
+    'TurnitinBot',
+    'trendictionbot',
+    'VoilaBot',
+    'CommonCrawler',
+    'Lipperhey',
+    'Hatena',
+    'MegaIndex',
+    'WBSearchBot',
+    'ZoominfoBot',
+    'SentiBot',
+];
+    $user_agent = $_SERVER['HTTP_USER_AGENT'] ?? '';
+
+    foreach ( $bot_agents as $bot_agent ) {
+        if ( stripos($user_agent, $bot_agent) !== false ) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+/**
 * Imports htmx into the footer
 *
 * @since 0.1
@@ -31,6 +86,10 @@ add_action( 'wp_enqueue_scripts', 'swapper_import_htmx_into_footer' );
 * @return array Modified array of body classes.
 */
 function swapper_add_htmx_attributes_to_body($classes) {
+    if (swapper_is_bot()) {
+        return;
+    }
+
     $attributes = array(
         'hx-indicator="#swapper-content"',
         'hx-target="#swapper-site-content"',
@@ -50,6 +109,9 @@ add_filter('body_class', 'swapper_add_htmx_attributes_to_body', 20, 2);
 * @since 0.1
 */
 function start_output_buffer() {
+    if (swapper_is_bot()) {
+        return;
+    }
     ob_start();
 }
 
@@ -61,6 +123,10 @@ function start_output_buffer() {
 * @returns string added opening and closing div tags
 */
 function end_output_buffer() {
+    if (swapper_is_bot()) {
+        return;
+    }
+
     $content = ob_get_clean();
 
     $dom = new DOMDocument();
