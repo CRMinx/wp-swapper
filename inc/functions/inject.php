@@ -141,6 +141,15 @@ function end_output_buffer() {
         }
     }
 
+    $footer = $dom->getElementsByTagName('footer')->item(0);
+    if ($footer) {
+        $links = $footer->getElementsByTagName('a');
+        foreach ($links as $link) {
+            $link->setAttribute('hx-get', $link->getAttribute('href'));
+            $link->setAttribute('hx-push-url', 'true');
+        }
+    }
+
     $content = $dom->saveHTML();
     // Append the opening <div> tag to the end of the header content
     $content = preg_replace('/(<\/header>)/i', '</header><div id="swapper-site-content" hx-boost="true">', $content, 1);
