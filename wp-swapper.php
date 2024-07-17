@@ -33,6 +33,7 @@ define( 'WP_SWAPPER_WEB_INFO',             WP_SWAPPER_WEB_MAIN . 'plugin_informa
 define( 'WP_SWAPPER_FILE',                 __FILE__ );
 define( 'WP_SWAPPER_PATH',                  realpath( plugin_dir_path( WP_SWAPPER_FILE ) ) . '/' );
 define( 'WP_SWAPPER_INC_PATH',              realpath( WP_SWAPPER_PATH . 'inc/' ) . '/' );
+define( 'WP_SWAPPER_VIEWS_PATH',            realpath( WP_SWAPPER_PATH . 'views' ) . '/' );
 
 require_once WP_SWAPPER_INC_PATH . 'constants.php';
 
