@@ -41,15 +41,15 @@
     <div class="mt-12">
         <p class="text-xl font-bold">Custom Loader</p>
         <hr class="mt-2" />
-        <form class="mt-2">
+        <form class="mt-2" method="post" action="options.php">
             <?php
             settings_fields('wp_swapper_options_group');
             do_settings_sections('wp_swapper_options_group');
             ?>
-            <input type="hidden" id="wp_swapper_custom_icon" name="wp_swapper_custom_icon" value="<?php echo esc_attr(get_option('wp_swapper_custom_icon')); ?>" />
+            <input type="hidden" id="wp_swapper_custom_icon" name="wp_swapper_loading_icon" value="<?php echo esc_attr(get_option('wp_swapper_loading_icon')); ?>" />
             <button type="button" class="button" id="wp_swapper_select_icon_button">Select Custom Icon</button>
             <div id="wp_swapper_custom_icon_preview" style="margin-top:10px;">
-                <?php if ($icon = get_option('wp_swapper_custom_icon')) : ?>
+                <?php if ($icon = get_option('wp_swapper_loading_icon')) : ?>
                     <img src="<?php echo esc_url($icon); ?>" style="max-width:100px;" />
                 <?php endif; ?>
             </div>
