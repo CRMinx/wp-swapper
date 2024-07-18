@@ -18,6 +18,16 @@ function swapper_settings_action_links( $actions ) {
 }
 add_filter( 'plugin_action_links_' . plugin_basename( WP_SWAPPER_FILE ), 'swapper_settings_action_links' );
 
+function wp_swapper_register_settings() {
+    register_setting('wp_swapper_options_group', 'wp_swapper_loading_icon');
+}
+add_action('admin_init', 'wp_swapper_register_settings');
+
+function wp_swapper_enqueue_media() {
+    wp_enqueue_media();
+}
+add_action('admin_enqueue_scripts', 'wp_swapper_enqueue_media');
+
 /**
 * Add WP Swapper link to admin menu
 *

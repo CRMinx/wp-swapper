@@ -152,7 +152,7 @@ function end_output_buffer() {
 
     $content = $dom->saveHTML();
 
-    $loader = wp_swapper_add_loading_icon();
+    $loader = wp_swapper_get_loading_icon();
     // Append the opening <div> tag to the end of the header content
     $content = preg_replace('/(<\/header>)/i', '</header><div id="swapper-loader">' . $loader . '<div id="swapper-site-content" hx-boost="true">', $content, 1);
 
@@ -175,40 +175,16 @@ add_action('template_redirect', 'start_output_buffer');
 // Hook into wp_footer to end output buffering and send output
 add_action('wp_footer', 'end_output_buffer');
 
-function wp_swapper_add_loading_icon() {
+function wp_swapper_get_loading_icon() {
     $icon_option = get_option('wp_swapper_loading_icon');
     $custom_icon = get_option('wp_swapper_custom_icon');
 
     if ($icon_option == 'spinner') {
-        return '<div class="wp-swapper-spinner"></div>';
+        return '<svg class="size-12 text-brand-secondary" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><circle cx="12" cy="2" r="0" fill="currentColor"><animate attributeName="r" begin="0" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="2" r="0" fill="#232c34" transform="rotate(45 12 12)"><animate attributeName="r" begin="0.125s" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="2" r="0" fill="#232c34" transform="rotate(90 12 12)"><animate attributeName="r" begin="0.25s" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="2" r="0" fill="#232c34" transform="rotate(135 12 12)"><animate attributeName="r" begin="0.375s" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="2" r="0" fill="#232c34" transform="rotate(180 12 12)"><animate attributeName="r" begin="0.5s" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="2" r="0" fill="#232c34" transform="rotate(225 12 12)"><animate attributeName="r" begin="0.625s" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="2" r="0" fill="#232c34" transform="rotate(270 12 12)"><animate attributeName="r" begin="0.75s" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="2" r="0" fill="#232c34" transform="rotate(315 12 12)"><animate attributeName="r" begin="0.875s" calcMode="spline" dur="1s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle></svg>';
     } elseif ($icon_option == 'dots') {
-        return '<div class="dots"></div>';
+            return '<svg class="size-12 text-brand-secondary" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><circle cx="18" cy="12" r="0" fill="currentColor"><animate attributeName="r" begin=".67" calcMode="spline" dur="1.5s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="12" cy="12" r="0" fill="#232c34"><animate attributeName="r" begin=".33" calcMode="spline" dur="1.5s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle><circle cx="6" cy="12" r="0" fill="#232c34"><animate attributeName="r" begin="0" calcMode="spline" dur="1.5s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"/></circle></svg>';
     } elseif ($icon_option == 'custom' && $custom_icon) {
         return '<div class="wp-swapper-custom-loader" style="background-image: url(' . esc_url($custom_icon) . ');"></div>';
     }
 }
 
-function wp_swapper_register_settings() {
-    register_setting('wp_swapper_options_group', 'wp_swapper_loading_icon');
-}
-add_action('admin_init', 'wp_swapper_register_settings');
-
-function wp_swapper_enqueue_media() {
-    wp_enqueue_media();
-}
-add_action('admin_enqueue_scripts', 'wp_swapper_enqueue_media');
-
-
-function wp_swapper_enqueue_loading_icon() {
-    $icon_option = get_option('wp_swapper_loading_icon');
-    $custom_icon = get_option('wp_swapper_custom_icon');
-
-    if ($icon_option == 'spinner') {
-        wp_enqueue_style('wp-swapper-spinner', plugin_dir_url(__FILE__) . 'icons/spinner.css');
-    } elseif ($icon_option == 'dots') {
-        wp_enqueue_style('wp-swapper-dots', plugin_dir_url(__FILE__) . 'icons/dots.css');
-    } elseif ($icon_option == 'custom' && $custom_icon) {
-        wp_enqueue_style('wp-swapper-custom', $custom_icon);
-    }
-}
-add_action('wp_enqueue_scripts', 'wp_swapper_enqueue_loading_icon');
