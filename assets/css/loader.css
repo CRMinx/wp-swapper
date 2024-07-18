@@ -1,0 +1,31 @@
+#swapper-loader{
+    width: 100%;
+    position: relative;
+}
+
+.htmx-indicator {
+    opacity: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 9rem;
+    z-index: 10;
+    width: 8rem;
+    height: 8rem;
+    position: absolute;
+}
+
+.htmx-request .htmx-indicator {
+    opacity: 1;
+}
+
+.htmx-request.htmx-indicator {
+    opacity: 1;
+}
+
+.htmx-request #swapper-site-content {
+    opacity: 0;
+}
+
+.htmx-request#swapper-site-content {
+    opacity: 0;
+}
