@@ -15,6 +15,7 @@
     <hr class="mt-6" />
     <div class="mt-12">
         <p class="text-xl font-bold">Target Elements</p>
+        <p>Select the elements to create a container for content swapping.</p>
         <hr class="mt-2" />
         <form class="mt-2" method="post" action="options.php">
             <?php
@@ -25,11 +26,19 @@
                 <label class="text-lg" for="starting-target-element">Starting Target Element</label>
                 <p>Default: &#8249;&#8260;header&#8250;</p>
                 <input id="starting-target-element" type="text" name="wp_swapper_starting_target_element" value="<?php echo esc_attr(get_option('wp_swapper_starting_target_element')) ?>" />
+                <label class="text-lg" for="starting-target-element-index">Starting Target Element Index</label>
+                <p>If multiple elements return, which one?</p>
+                <p>Default: 0 (First appearance of the specified tag.)</p>
+                <input id="starting-target-element-index" type="number" name="wp_swapper_starting_target_element_index" value="<?php echo esc_attr(get_option('wp_swapper_starting_target_element_index')) ?>" />
             </div>
             <div class="flex flex-col">
                 <label class="text-lg" for="starting-target-element">Ending Target Element</label>
-                <p>Default: &#8249;footer&#8250;</p>
+                <p>Default: &#8249;footer</p>
                 <input id="starting-target-element" type="text" name="wp_swapper_ending_target_element" value="<?php echo esc_attr(get_option('wp_swapper_ending_target_element')) ?>" />
+                <label class="text-lg" for="ending-target-element-index">Ending Target Element Index</label>
+                <p>If multiple elements return, which one?</p>
+                <p>Default: -1 (Last appearance of the specified tag.)</p>
+                <input id="ending-target-element-index" type="number" name="wp_swapper_ending_target_element_index" value="<?php echo esc_attr(get_option('wp_swapper_ending_target_element_index')) ?>" />
             </div>
             <?php submit_button(); ?>
         </form>

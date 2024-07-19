@@ -148,7 +148,7 @@ function end_output_buffer() {
         }
     }
 
-    $footer = $dom->getElementsByTagName('footer')->item(0);
+    $footer = $dom->getElementsByTagName('footer')->item(-1);
     if ($footer) {
         $links = $footer->getElementsByTagName('a');
         foreach ($links as $link) {
@@ -160,17 +160,29 @@ function end_output_buffer() {
     $content = $dom->saveHTML();
 
     $loader = wp_swapper_get_loading_icon();
+
+    $target_starting_element = get_option('wp_swapper_starting_target_element', '</header>');
+
+    $escaped_starting_target_element = preg_quote($target_starting_element, '#');
+
     // Append the opening <div> tag to the end of the header content
-    $content = preg_replace('/(<\/header>)/i', '</header><div id="swapper-loader">' . $loader . '<div id="swapper-site-content" hx-boost="true">', $content, 1);
+    $content = preg_replace('#(' . $escaped_starting_target_element . ')#i', $target_starting_element . '<div id="swapper-loader">' . $loader . '<div id="swapper-site-content" hx-boost="true">', $content, 1);
+
+    $target_ending_element = get_option('wp_swapper_ending_target_element', '<footer');
+
+    $escaped_ending_target_element = preg_quote($target_ending_element, '#');
 
     // Prepend the closing </div> tag to the start of the footer content
-    $content = preg_replace('/(<footer)/i', '</div></div><footer', $content, 1);
+    $content = preg_replace('#(' . $escaped_ending_target_element . ')#i', '</div></div>' . $target_ending_element, $content, 1);
 
     if (isset($_SERVER['HTTP_HX_REQUEST'])) {
         // Strip content before the swapper-site div
         $content = preg_replace('/.*(<div id="swapper-site-content" hx-boost="true">)/is', '$1', $content);
-        // Strip content after the closing footer tag
-        $content = preg_replace('/<footer.*$/is', '', $content);
+
+        $dynamic_ending_pattern = '#(' . $escaped_ending_target_element . ').*$#is';
+
+        // Strip content after the closing target tag
+        $content = preg_replace($dynamic_ending_pattern, '$1', $content);
     }
 
     echo $content;
@@ -193,4 +205,3 @@ function wp_swapper_get_loading_icon() {
         return '<div class="htmx-indicator" style="background-image: url(' . esc_url($icon_option) . '); width: 100px; height: 100px;"></div>';
     }
 }
-
