@@ -6,7 +6,7 @@
 */
 
 ?>
-<div x-data="{ selectedSection: 'loading-icon' }" class="flex w-full">
+<div x-data="{ selectedSection: 'advanced' }" class="flex w-full">
 
     <div class="w-1/4">
 

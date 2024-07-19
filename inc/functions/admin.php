@@ -20,6 +20,8 @@ add_filter( 'plugin_action_links_' . plugin_basename( WP_SWAPPER_FILE ), 'swappe
 
 function wp_swapper_register_settings() {
     register_setting('wp_swapper_options_group', 'wp_swapper_loading_icon');
+    register_setting('wp_swapper_target_elements_group', 'wp_swapper_starting_target_element');
+    register_setting('wp_swapper_target_elements_group', 'wp_swapper_ending_target_element');
 }
 add_action('admin_init', 'wp_swapper_register_settings');
 

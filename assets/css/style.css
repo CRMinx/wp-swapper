@@ -575,10 +575,6 @@ video {
   display: flex;
 }
 
-.table {
-  display: table;
-}
-
 .hidden {
   display: none;
 }
@@ -596,11 +592,6 @@ video {
 .size-24 {
   width: 6rem;
   height: 6rem;
-}
-
-.size-6 {
-  width: 1.5rem;
-  height: 1.5rem;
 }
 
 .w-1\/4 {
