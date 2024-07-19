@@ -4,7 +4,6 @@
 }
 
 .htmx-indicator {
-    opacity: 0;
     left: 50%;
     transform: translateX(-50%);
     margin-top: 9rem;
@@ -12,14 +11,15 @@
     width: 8rem;
     height: 8rem;
     position: absolute;
+    visibility: hidden;
 }
 
 .htmx-request .htmx-indicator {
-    opacity: 1;
+    visibility: visible;
 }
 
 .htmx-request.htmx-indicator {
-    opacity: 1;
+    visibility: visible;
 }
 
 .htmx-request #swapper-site-content {
