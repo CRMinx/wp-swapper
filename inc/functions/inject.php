@@ -148,7 +148,7 @@ function end_output_buffer() {
         }
     }
 
-    $footer = $dom->getElementsByTagName('footer')->item(-1);
+    $footer = $dom->getElementsByTagName('footer')->item(0);
     if ($footer) {
         $links = $footer->getElementsByTagName('a');
         foreach ($links as $link) {
