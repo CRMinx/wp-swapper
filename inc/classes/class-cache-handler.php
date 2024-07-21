@@ -47,13 +47,19 @@ class CacheHandler {
         $cachedContent = self::getCachedComponent($key);
 
         if ($cachedContent) {
-            return $newContent !== $cachedContent;
+            return self::normalizeContent($newContent) !== self::normalizeContent($cachedContent);
         }
 
         return true;
     }
 
     private static function normalizeContent($content) {
-        return preg_replace('/\s+/', ' ', trim($content));
+        // Remove extra whitespace, newlines, and tabs
+        $normalizedContent = preg_replace('/\s+/', ' ', trim($content));
+
+        // Strip all HTML attributes
+        $normalizedContent = preg_replace('/<(\w+)([^>]*?)>/', '<$1>', $normalizedContent);
+
+        return $normalizedContent;
     }
 }

@@ -1,6 +1,11 @@
 <?php
 
+use WP_Swapper\Components\FooterComponent;
+
 require WP_SWAPPER_COMPONENTS_PATH . 'class-head-component.php';
+require WP_SWAPPER_COMPONENTS_PATH . 'class-header-component.php';
+require WP_SWAPPER_COMPONENTS_PATH . 'class-widget-component.php';
+require WP_SWAPPER_COMPONENTS_PATH . 'class-footer-scripts-component.php';
 require WP_SWAPPER_CLASSES_PATH . 'class-cache-handler.php';
 
 defined( 'ABSPATH' ) || exit;
@@ -66,13 +71,13 @@ $bot_agents = [
 * @since 0.1
 */
 function swapper_enqueue_frontend_scripts() {
-    wp_enqueue_script(
-        'htmx', //Handle for the script
-        'https://unpkg.com/htmx.org@2.0.1',
-        [],
-        '2.0.1',
-        true
-    );
+    //wp_enqueue_script(
+    //    'htmx', //Handle for the script
+    //    'https://unpkg.com/htmx.org@2.0.1',
+    //    [],
+    //    '2.0.1',
+    //    true
+    //);
 
     wp_enqueue_style(
         'swapper_loader_style',
@@ -149,6 +154,62 @@ function end_output_buffer() {
 
         // Set a header to indicate that the head content has changed
         header('X-Component-Changed-Head: true');
+    }
+
+    $headerComponent = new HeaderComponent($content);
+
+    // Check if the header content has changed
+    if (CacheHandler::hasComponentChanged('header', $headerComponent->getContent())) {
+
+        // Cache the new header content
+        CacheHandler::cacheComponent('header', $headerComponent->getContent());
+
+        // Set a header to indicate that the header content has changed
+        header('X-Component-Changed-Header: true');
+    }
+
+    /**$widgetComponent = new WidgetComponent();
+*
+*    $widgetComponent = $widgetComponent->getContent();
+*    foreach ($widgetComponent as $sidebarId => $content) {
+*        if (CacheHandler::hasComponentChanged("widget_{$sidebarId}", $content)) {
+*
+*            // Cache the new widget content
+*            CacheHandler::cacheComponent("widget_{$sidebarId}", $content);
+*
+*            // Set a header to indicate that the widget content has changed
+*            header("X-Component-Changed-Widget-{$sidebarId}: true");
+*        }
+*    }
+*/
+
+    $footerComponent = new FooterComponent($content);
+
+    // Check if the footer content has changed
+    if ($footerComponent->hasComponentChanged('footer', $footerComponent->getContent())) {
+        var_dump('footer changed');
+
+        // Cache the new header content
+        $footerComponent->cacheComponent('footer', $footerComponent->getContent());
+
+        // Set a header to indicate that the header content has changed
+        header('X-Component-Changed-Footer: true');
+    }
+
+
+    $footerScriptsComponent = new FooterScriptsComponent($content);
+
+    // Check if the header content has changed
+    if (CacheHandler::hasComponentChanged('footer_scripts', $footerScriptsComponent->getContent())) {
+        //var_dump('footer scripts changed');
+        //var_dump($footerScriptsComponent->getContent());
+        //var_dump($_SERVER['footer_scripts']);
+
+        // Cache the new header content
+        CacheHandler::cacheComponent('footer_scripts', $footerScriptsComponent->getContent());
+
+        // Set a header to indicate that the footer script content has changed
+        header('X-Component-Changed-Footer-Scripts: true');
     }
 
     $dom = new DOMDocument();

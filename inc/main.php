@@ -4,7 +4,7 @@ defined( 'ABSPATH' ) || exit;
 
 // Composer autoload.
 if ( file_exists( WP_SWAPPER_PATH . 'vendor/autoload.php' ) ) {
-    require WP_SWAPPER_PATH . 'vendor/autolaod.php';
+    require WP_SWAPPER_PATH . 'vendor/autoload.php';
 }
 
 require WP_SWAPPER_FUNCTIONS_PATH . 'inject.php';

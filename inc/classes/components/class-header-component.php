@@ -24,27 +24,27 @@ class HeaderComponent {
     * @param string $html
     */
     public function __construct($html) {
-        $this->content = $this->extractHeadContent($html);
+        $this->content = $this->extractHeaderContent($html);
     }
 
     /**
-     *  Extract the content between the <head> tags
+     *  Extract the content between the <header> tags
      *
      * @since 0.1
      *
      *  @param string $html
      *
-     *  @returns string <head> tag of the document.
+     *  @returns string <header> tag of the document.
      */
-    private function extractHeadContent($html) {
+    private function extractHeaderContent($html) {
         $dom = new DOMDocument();
         @$dom->loadHTML($html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
-        $head = $dom->getElementsByTagName('head')->item(0);
-        return $head ? $dom->saveHTML($head) : '';
+        $header = $dom->getElementsByTagName('header')->item(0);
+        return $header ? $dom->saveHTML($header) : '';
     }
 
     /**
-    * Get the extracted head content
+    * Get the extracted header content
     *
     * @since 0.1
     *
