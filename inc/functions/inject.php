@@ -276,7 +276,7 @@ function end_output_buffer() {
 
     if (isset($_SERVER['HTTP_HX_REQUEST'])) {
         // Strip content before the swapper-site div
-        $content = preg_replace('/.*(<div id="swapper-site-content" hx-boost="true">)/is', '$1', $content);
+        $content = preg_replace('/.*(<div id="swapper-site-content" hx-boost="true">)/is', '', $content);
 
         $content = preg_replace('#</div></div></div><footer.*</footer>.*$#is', '', $content);
     }
