@@ -110,6 +110,10 @@ function swapper_add_htmx_attributes_to_body($classes) {
         'hx-swap="innerHTML show:window:top"'
     );
 
+    //$attributes = array(
+    //    'hx-boost="true"',
+    //);
+
     echo ' ' . implode(' ', $attributes);
     return $classes;
 }
@@ -219,6 +223,16 @@ function end_output_buffer() {
     $dom = new DOMDocument();
     @$dom->loadHTML($content, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
 
+    $body = $dom->getElementsByTagName('body')->item(0);
+    $data_attributes = '';
+    if ($body) {
+        foreach ($body->attributes as $attr) {
+            if (strpos($attr->nodeName, 'data-') === 0) {
+                $data_attributes .= ' ' . $attr->nodeName . '="' . $attr->nodeValue . '"';
+            }
+        }
+    }
+
     $header = $dom->getElementsByTagName('header')->item(0);
     if ($header) {
         $links = $header->getElementsByTagName('a');
@@ -241,25 +255,30 @@ function end_output_buffer() {
 
     $loader = wp_swapper_get_loading_icon();
 
-    $target_starting_element = get_option('wp_swapper_starting_target_element', '</header>');
+    //$target_starting_element = get_option('wp_swapper_starting_target_element', '</header>');
 
-    $escaped_starting_target_element = preg_quote($target_starting_element, '#');
+    //$escaped_starting_target_element = preg_quote($target_starting_element, '#');
 
     // Append the opening <div> tag to the end of the header content
-    $content = preg_replace('#(</header>)#i', '</header><div id="swapper-loader">' . $loader . '<div id="swapper-site-content" hx-boost="true">', $content, 1);
+    $content = preg_replace(
+        '#(</header>)#i',
+        '</header><div id="swapper-loader">' . $loader . '<div id="swapper-site-content" hx-boost="true"><div' . $data_attributes . '>',
+        $content,
+        1
+    );
 
     $target_ending_element = get_option('wp_swapper_ending_target_element', '<footer');
 
     $escaped_ending_target_element = preg_quote($target_ending_element, '#');
 
     // Prepend the closing </div> tag to the start of the footer content
-    $content = preg_replace('#(<footer)#i', '</div></div>$1', $content, 1);
+    $content = preg_replace('#(<footer)#i', '</div></div></div>$1', $content, 1);
 
     if (isset($_SERVER['HTTP_HX_REQUEST'])) {
         // Strip content before the swapper-site div
         $content = preg_replace('/.*(<div id="swapper-site-content" hx-boost="true">)/is', '$1', $content);
 
-        $content = preg_replace('#</div></div><footer.*</footer>.*$#is', '', $content);
+        $content = preg_replace('#</div></div></div><footer.*</footer>.*$#is', '', $content);
     }
 
     echo $changedComponents['head'];
