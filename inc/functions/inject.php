@@ -1,5 +1,8 @@
 <?php
 
+require WP_SWAPPER_COMPONENTS_PATH . 'class-head-component.php';
+require WP_SWAPPER_CLASSES_PATH . 'class-cache-handler.php';
+
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -135,6 +138,18 @@ function end_output_buffer() {
     }
 
     $content = ob_get_clean();
+
+    $headComponent = new HeadComponent($content);
+
+    // Check if the head content has changed
+    if (CacheHandler::hasComponentChanged('head', $headComponent->getContent())) {
+
+        // Cache the new head content
+        CacheHandler::cacheComponent('head', $headComponent->getContent());
+
+        // Set a header to indicate that the head content has changed
+        header('X-Component-Changed-Head: true');
+    }
 
     $dom = new DOMDocument();
     @$dom->loadHTML($content, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);

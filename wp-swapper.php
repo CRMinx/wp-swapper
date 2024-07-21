@@ -18,6 +18,8 @@
 
 defined( 'ABSPATH' ) || exit;
 
+session_start();
+
 // Swapper defines.
 define( 'WP_SWAPPER_VERSION',              '0.1.0' );
 define( 'WP_SWAPPER_WP_VERSION',           '5.8' );
@@ -45,6 +47,8 @@ define( 'WP_SWAPPER_ADMIN_UI_MODULES_PATH', realpath( WP_SWAPPER_ADMIN_UI_PATH .
 define( 'WP_SWAPPER_COMMON_PATH',           realpath( WP_SWAPPER_INC_PATH . 'common' ) . '/' );
 define( 'WP_SWAPPER_FUNCTIONS_PATH',        realpath( WP_SWAPPER_INC_PATH . 'functions' ) . '/' );
 define( 'WP_SWAPPER_VENDORS_PATH',          realpath( WP_SWAPPER_INC_PATH . 'vendors' ) . '/' );
+define ( 'WP_SWAPPER_CLASSES_PATH',         realpath( WP_SWAPPER_INC_PATH . 'classes' ) . '/' );
+define ( 'WP_SWAPPER_COMPONENTS_PATH',      realpath( WP_SWAPPER_CLASSES_PATH . 'components' ) . '/' );
 define( 'WP_SWAPPER_3RD_PARTY_PATH',        realpath( WP_SWAPPER_INC_PATH . '3rd-party' ) . '/' );
 if ( ! defined( 'WP_SWAPPER_CONFIG_PATH' ) ) {
 	define( 'WP_SWAPPER_CONFIG_PATH',       WP_CONTENT_DIR . '/wp-swapper-config/' );
