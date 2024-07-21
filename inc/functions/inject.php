@@ -2,8 +2,8 @@
 
 use WP_Swapper\Components\FooterComponent;
 use WP_Swapper\Components\HeaderComponent;
+use WP_Swapper\Components\HeadComponent;
 
-require WP_SWAPPER_COMPONENTS_PATH . 'class-head-component.php';
 require WP_SWAPPER_COMPONENTS_PATH . 'class-widget-component.php';
 require WP_SWAPPER_COMPONENTS_PATH . 'class-footer-scripts-component.php';
 require WP_SWAPPER_CLASSES_PATH . 'class-cache-handler.php';
@@ -147,10 +147,10 @@ function end_output_buffer() {
     $headComponent = new HeadComponent($content);
 
     // Check if the head content has changed
-    if (CacheHandler::hasComponentChanged('head', $headComponent->getContent())) {
+    if ($headComponent->hasComponentChanged('head', $headComponent->getContent())) {
 
         // Cache the new head content
-        CacheHandler::cacheComponent('head', $headComponent->getContent());
+        $headComponent->cacheComponent('head', $headComponent->getContent());
 
         // Set a header to indicate that the head content has changed
         header('X-Component-Changed-Head: true');

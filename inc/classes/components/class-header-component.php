@@ -62,7 +62,7 @@ class HeaderComponent {
     }
 
     /**
-    * Remove white space and html attributes from footer
+    * Remove white space and html attributes from header
     *
     * @since 0.1
     *
