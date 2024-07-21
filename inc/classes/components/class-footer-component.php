@@ -62,6 +62,13 @@ class FooterComponent {
         return $this->content;
     }
 
+    /**
+    * Remove white space and html attributes from footer
+    *
+    * @since 0.1
+    *
+    * @returns string
+    */
     protected function normalizeContent($content) {
         // Remove extra whitespace, newlines, and tabs
         $normalizedContent = preg_replace('/\s+/', ' ', trim($content));

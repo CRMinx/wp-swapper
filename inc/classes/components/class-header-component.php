@@ -1,12 +1,19 @@
 <?php
-defined( 'ABSPATH' ) || exit;
+
+namespace WP_Swapper\Components;
+
+use WP_Swapper\Traits\CacheHandlerTrait;
+use DOMDocument;
+
 /**
 * Class to handle header component
 *
 * @since 0.1
 */
-
 class HeaderComponent {
+
+    use CacheHandlerTrait;
+
     /**
     * Buffer content
     *
@@ -52,5 +59,22 @@ class HeaderComponent {
     */
     public function getContent() {
         return $this->content;
+    }
+
+    /**
+    * Remove white space and html attributes from footer
+    *
+    * @since 0.1
+    *
+    * @returns string
+    */
+    protected function normalizeContent($content) {
+        // Remove extra whitespace, newlines, and tabs
+        $normalizedContent = preg_replace('/\s+/', ' ', trim($content));
+
+        // Strip all HTML attributes
+        $normalizedContent = preg_replace('/<(\w+)([^>]*?)>/', '<$1>', $normalizedContent);
+
+        return $normalizedContent;
     }
 }

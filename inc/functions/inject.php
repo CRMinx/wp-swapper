@@ -1,9 +1,9 @@
 <?php
 
 use WP_Swapper\Components\FooterComponent;
+use WP_Swapper\Components\HeaderComponent;
 
 require WP_SWAPPER_COMPONENTS_PATH . 'class-head-component.php';
-require WP_SWAPPER_COMPONENTS_PATH . 'class-header-component.php';
 require WP_SWAPPER_COMPONENTS_PATH . 'class-widget-component.php';
 require WP_SWAPPER_COMPONENTS_PATH . 'class-footer-scripts-component.php';
 require WP_SWAPPER_CLASSES_PATH . 'class-cache-handler.php';
@@ -159,10 +159,11 @@ function end_output_buffer() {
     $headerComponent = new HeaderComponent($content);
 
     // Check if the header content has changed
-    if (CacheHandler::hasComponentChanged('header', $headerComponent->getContent())) {
+    if ($headerComponent->hasComponentChanged('header', $headerComponent->getContent())) {
+        var_dump('header changed');
 
         // Cache the new header content
-        CacheHandler::cacheComponent('header', $headerComponent->getContent());
+        $headerComponent->cacheComponent('header', $headerComponent->getContent());
 
         // Set a header to indicate that the header content has changed
         header('X-Component-Changed-Header: true');
