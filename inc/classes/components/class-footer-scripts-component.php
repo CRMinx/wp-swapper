@@ -1,5 +1,10 @@
 <?php
-defined( 'ABSPATH' ) || exit;
+
+namespace WP_Swapper\Components;
+
+use WP_Swapper\Traits\CacheHandlerTrait;
+use DOMDocument;
+
 /**
 * Class to handle footer scripts component
 *
@@ -7,6 +12,9 @@ defined( 'ABSPATH' ) || exit;
 */
 
 class FooterScriptsComponent {
+
+    use CacheHandlerTrait;
+
     /**
     * Buffer content
     *
@@ -60,5 +68,19 @@ class FooterScriptsComponent {
     */
     public function getContent() {
         return $this->content;
+    }
+
+    /**
+    * Remove white space and html attributes from footer
+    *
+    * @since 0.1
+    *
+    * @returns string
+    */
+    protected function normalizeContent($content) {
+        // Remove extra whitespace, newlines, and tabs
+        $normalizedContent = preg_replace('/\s+/', ' ', trim($content));
+
+        return $normalizedContent;
     }
 }

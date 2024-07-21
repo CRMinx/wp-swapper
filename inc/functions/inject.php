@@ -3,9 +3,9 @@
 use WP_Swapper\Components\FooterComponent;
 use WP_Swapper\Components\HeaderComponent;
 use WP_Swapper\Components\HeadComponent;
+use WP_Swapper\Components\FooterScriptsComponent;
 
 require WP_SWAPPER_COMPONENTS_PATH . 'class-widget-component.php';
-require WP_SWAPPER_COMPONENTS_PATH . 'class-footer-scripts-component.php';
 require WP_SWAPPER_CLASSES_PATH . 'class-cache-handler.php';
 
 defined( 'ABSPATH' ) || exit;
@@ -160,7 +160,6 @@ function end_output_buffer() {
 
     // Check if the header content has changed
     if ($headerComponent->hasComponentChanged('header', $headerComponent->getContent())) {
-        var_dump('header changed');
 
         // Cache the new header content
         $headerComponent->cacheComponent('header', $headerComponent->getContent());
@@ -188,7 +187,6 @@ function end_output_buffer() {
 
     // Check if the footer content has changed
     if ($footerComponent->hasComponentChanged('footer', $footerComponent->getContent())) {
-        var_dump('footer changed');
 
         // Cache the new header content
         $footerComponent->cacheComponent('footer', $footerComponent->getContent());
@@ -197,17 +195,13 @@ function end_output_buffer() {
         header('X-Component-Changed-Footer: true');
     }
 
-
     $footerScriptsComponent = new FooterScriptsComponent($content);
 
     // Check if the header content has changed
-    if (CacheHandler::hasComponentChanged('footer_scripts', $footerScriptsComponent->getContent())) {
-        //var_dump('footer scripts changed');
-        //var_dump($footerScriptsComponent->getContent());
-        //var_dump($_SERVER['footer_scripts']);
+    if ($footerScriptsComponent->hasComponentChanged('footer_scripts', $footerScriptsComponent->getContent())) {
 
         // Cache the new header content
-        CacheHandler::cacheComponent('footer_scripts', $footerScriptsComponent->getContent());
+        $footerScriptsComponent->cacheComponent('footer_scripts', $footerScriptsComponent->getContent());
 
         // Set a header to indicate that the footer script content has changed
         header('X-Component-Changed-Footer-Scripts: true');
@@ -269,7 +263,7 @@ function end_output_buffer() {
 add_action('template_redirect', 'start_output_buffer');
 
 // Hook into wp_footer to end output buffering and send output
-add_action('wp_footer', 'end_output_buffer');
+add_action('wp_print_footer_scripts', 'end_output_buffer');
 
 function wp_swapper_get_loading_icon() {
     $icon_option = get_option('wp_swapper_loading_icon', 'spinner');
