@@ -1,5 +1,7 @@
 <?php
 
+defined( 'ABSPATH' ) || exit;
+
 use WP_Swapper\Components\FooterComponent;
 use WP_Swapper\Components\HeaderComponent;
 use WP_Swapper\Components\HeadComponent;
@@ -7,8 +9,6 @@ use WP_Swapper\Components\FooterScriptsComponent;
 
 require WP_SWAPPER_COMPONENTS_PATH . 'class-widget-component.php';
 require WP_SWAPPER_CLASSES_PATH . 'class-cache-handler.php';
-
-defined( 'ABSPATH' ) || exit;
 
 /**
 * Detects search engine bots
@@ -71,13 +71,12 @@ $bot_agents = [
 * @since 0.1
 */
 function swapper_enqueue_frontend_scripts() {
-    //wp_enqueue_script(
-    //    'htmx', //Handle for the script
-    //    'https://unpkg.com/htmx.org@2.0.1',
-    //    [],
-    //    '2.0.1',
-    //    true
-    //);
+    wp_enqueue_script(
+        'htmx', //Handle for the script
+        'https://unpkg.com/htmx.org@2.0.1',
+        [],
+        '2.0.1',
+    );
 
     wp_enqueue_style(
         'swapper_loader_style',
@@ -144,6 +143,8 @@ function end_output_buffer() {
 
     $content = ob_get_clean();
 
+    $changedComponents = [];
+
     $headComponent = new HeadComponent($content);
 
     // Check if the head content has changed
@@ -151,6 +152,8 @@ function end_output_buffer() {
 
         // Cache the new head content
         $headComponent->cacheComponent('head', $headComponent->getContent());
+
+        $changedComponents['head'] = $headComponent->getContent();
 
         // Set a header to indicate that the head content has changed
         header('X-Component-Changed-Head: true');
@@ -164,8 +167,38 @@ function end_output_buffer() {
         // Cache the new header content
         $headerComponent->cacheComponent('header', $headerComponent->getContent());
 
+        $changedComponents['header'] = $headerComponent->getContent();
+
         // Set a header to indicate that the header content has changed
         header('X-Component-Changed-Header: true');
+    }
+
+    $footerComponent = new FooterComponent($content);
+
+    // Check if the footer content has changed
+    if ($footerComponent->hasComponentChanged('footer', $footerComponent->getContent())) {
+
+        // Cache the new footer content
+        $footerComponent->cacheComponent('footer', $footerComponent->getContent());
+
+        $changedComponents['footer'] = $footerComponent->getContent();
+
+        // Set a header to indicate that the footer content has changed
+        header('X-Component-Changed-Footer: true');
+    }
+
+    $footerScriptsComponent = new FooterScriptsComponent($content);
+
+    // Check if the footer scripts content has changed
+    if ($footerScriptsComponent->hasComponentChanged('footer_scripts', $footerScriptsComponent->getContent())) {
+
+        // Cache the new footer scripts content
+        $footerScriptsComponent->cacheComponent('footer_scripts', $footerScriptsComponent->getContent());
+
+        $changedComponents['footer_scripts'] = $footerScriptsComponent->getContent();
+
+        // Set a header to indicate that the footer script content has changed
+        header('X-Component-Changed-Footer-Scripts: true');
     }
 
     /**$widgetComponent = new WidgetComponent();
@@ -182,30 +215,6 @@ function end_output_buffer() {
 *        }
 *    }
 */
-
-    $footerComponent = new FooterComponent($content);
-
-    // Check if the footer content has changed
-    if ($footerComponent->hasComponentChanged('footer', $footerComponent->getContent())) {
-
-        // Cache the new header content
-        $footerComponent->cacheComponent('footer', $footerComponent->getContent());
-
-        // Set a header to indicate that the header content has changed
-        header('X-Component-Changed-Footer: true');
-    }
-
-    $footerScriptsComponent = new FooterScriptsComponent($content);
-
-    // Check if the header content has changed
-    if ($footerScriptsComponent->hasComponentChanged('footer_scripts', $footerScriptsComponent->getContent())) {
-
-        // Cache the new header content
-        $footerScriptsComponent->cacheComponent('footer_scripts', $footerScriptsComponent->getContent());
-
-        // Set a header to indicate that the footer script content has changed
-        header('X-Component-Changed-Footer-Scripts: true');
-    }
 
     $dom = new DOMDocument();
     @$dom->loadHTML($content, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
@@ -237,26 +246,26 @@ function end_output_buffer() {
     $escaped_starting_target_element = preg_quote($target_starting_element, '#');
 
     // Append the opening <div> tag to the end of the header content
-    $content = preg_replace('#(' . $escaped_starting_target_element . ')#i', $target_starting_element . '<div id="swapper-loader">' . $loader . '<div id="swapper-site-content" hx-boost="true">', $content, 1);
+    $content = preg_replace('#(</header>)#i', '</header><div id="swapper-loader">' . $loader . '<div id="swapper-site-content" hx-boost="true">', $content, 1);
 
     $target_ending_element = get_option('wp_swapper_ending_target_element', '<footer');
 
     $escaped_ending_target_element = preg_quote($target_ending_element, '#');
 
     // Prepend the closing </div> tag to the start of the footer content
-    $content = preg_replace('#(' . $escaped_ending_target_element . ')#i', '</div></div>' . $target_ending_element, $content, 1);
+    $content = preg_replace('#(<footer)#i', '</div></div>$1', $content, 1);
 
     if (isset($_SERVER['HTTP_HX_REQUEST'])) {
         // Strip content before the swapper-site div
         $content = preg_replace('/.*(<div id="swapper-site-content" hx-boost="true">)/is', '$1', $content);
 
-        $dynamic_ending_pattern = '#(' . $escaped_ending_target_element . ').*$#is';
-
-        // Strip content after the closing target tag
-        $content = preg_replace($dynamic_ending_pattern, '$1', $content);
+        $content = preg_replace('#</div></div><footer.*</footer>.*$#is', '', $content);
     }
 
+    echo $changedComponents['head'];
+    echo $changedComponents['header'];
     echo $content;
+    echo $changedComponents['footer_scripts'];
 }
 
 // Hook into template_redirect to start output buffering
