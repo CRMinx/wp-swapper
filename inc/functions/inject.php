@@ -78,6 +78,13 @@ function swapper_enqueue_frontend_scripts() {
         '2.0.1',
     );
 
+    wp_enqueue_script(
+        'swapper-script',
+        WP_SWAPPER_ASSETS_JS_URL . 'swapper-script.js',
+        null,
+        WP_SWAPPER_VERSION
+    );
+
     wp_enqueue_style(
         'swapper_loader_style',
         WP_SWAPPER_ASSETS_CSS_URL . 'loader.css',
@@ -262,7 +269,7 @@ function end_output_buffer() {
     // Append the opening <div> tag to the end of the header content
     $content = preg_replace(
         '#(</header>)#i',
-        '</header><div id="swapper-loader">' . $loader . '<div id="swapper-site-content" hx-boost="true"><div' . $data_attributes . '>',
+        '$1<div id="swapper-loader">' . $loader . '<div id="swapper-site-content" hx-boost="true"><div' . $data_attributes . '>',
         $content,
         1
     );
@@ -281,10 +288,25 @@ function end_output_buffer() {
         $content = preg_replace('#</div></div></div><footer.*</footer>.*$#is', '', $content);
     }
 
-    echo $changedComponents['head'];
-    echo $changedComponents['header'];
+    // echo $changedComponents['head'];
+
+    if ($changedComponents['header']) {
+        $dom_header = new DOMDocument();
+        @$dom_header->loadHTML($changedComponents['header'], LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+
+        $links = $dom_header->getElementsByTagName('a');
+        foreach ($links as $link) {
+            $link->setAttribute('hx-get', $link->getAttribute('href'));
+            $link->setAttribute('hx-push-url', 'true');
+        }
+
+        $changedComponents['header'] = $dom_header->saveHTML();
+        echo '<div id="changed-header" style="display: none;">' . $changedComponents['header'] . '</div>';
+    }
+
     echo $content;
-    echo $changedComponents['footer_scripts'];
+    //echo $changedComponents['footer'];
+    //echo $changedComponents['footer_scripts'];
 }
 
 // Hook into template_redirect to start output buffering
