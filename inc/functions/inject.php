@@ -301,7 +301,7 @@ function end_output_buffer() {
         }
 
         $changedComponents['header'] = $dom_header->saveHTML();
-        echo '<div id="changed-header" style="display: none;">' . $changedComponents['header'] . '</div>';
+        $content = '<div id="changed-header" style="display: none;">' . $changedComponents['header'] . '</div>' . $content;
     }
 
     echo $content;
