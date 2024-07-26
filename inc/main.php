@@ -7,7 +7,9 @@ if ( file_exists( WP_SWAPPER_PATH . 'vendor/autoload.php' ) ) {
     require WP_SWAPPER_PATH . 'vendor/autoload.php';
 }
 
-require WP_SWAPPER_FUNCTIONS_PATH . 'inject.php';
+if (!is_admin()) {
+    require WP_SWAPPER_FUNCTIONS_PATH . 'inject.php';
+}
 require WP_SWAPPER_FUNCTIONS_PATH . 'admin.php';
 
 //require_once WP_SWAPPER_INC_PATH . 'Dependencies' . DIRECTORY_SEPARATOR . 'ActionScheduler' . DIRECTORY_SEPARATOR . 'action-scheduler.php';

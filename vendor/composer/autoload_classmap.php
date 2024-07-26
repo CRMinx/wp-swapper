@@ -8,6 +8,7 @@ $baseDir = dirname($vendorDir);
 return array(
     'CacheHandler' => $baseDir . '/inc/classes/class-cache-handler.php',
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
+    'WP_Swapper\\Components\\BodyComponent' => $baseDir . '/inc/classes/components/class-body-component.php',
     'WP_Swapper\\Components\\FooterComponent' => $baseDir . '/inc/classes/components/class-footer-component.php',
     'WP_Swapper\\Components\\FooterScriptsComponent' => $baseDir . '/inc/classes/components/class-footer-scripts-component.php',
     'WP_Swapper\\Components\\HeadComponent' => $baseDir . '/inc/classes/components/class-head-component.php',

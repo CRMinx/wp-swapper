@@ -5,6 +5,7 @@ defined( 'ABSPATH' ) || exit;
 use WP_Swapper\Components\FooterComponent;
 use WP_Swapper\Components\HeaderComponent;
 use WP_Swapper\Components\HeadComponent;
+use WP_Swapper\Components\BodyComponent;
 use WP_Swapper\Components\FooterScriptsComponent;
 
 require WP_SWAPPER_COMPONENTS_PATH . 'class-widget-component.php';
@@ -184,6 +185,20 @@ function end_output_buffer() {
         header('X-Component-Changed-Header: true');
     }
 
+    $bodyComponent = new BodyComponent($content);
+
+    // Check if the body attributes have changed
+    if ($bodyComponent->hasComponentChanged('body', $bodyComponent->getContent())) {
+
+        // Cache the new body component
+        $bodyComponent->cacheComponent('body', $bodyComponent->getContent());
+
+        $changedComponents['body'] = $bodyComponent->getContent();
+
+        // Set a header to indicate that the body content has changed
+        header('X-Component-Changed-Body: true');
+    }
+
     $footerComponent = new FooterComponent($content);
 
     // Check if the footer content has changed
@@ -230,16 +245,6 @@ function end_output_buffer() {
     $dom = new DOMDocument();
     @$dom->loadHTML($content, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
 
-    $body = $dom->getElementsByTagName('body')->item(0);
-    $data_attributes = '';
-    if ($body) {
-        foreach ($body->attributes as $attr) {
-            if (strpos($attr->nodeName, 'data-') === 0) {
-                $data_attributes .= ' ' . $attr->nodeName . '="' . $attr->nodeValue . '"';
-            }
-        }
-    }
-
     $header = $dom->getElementsByTagName('header')->item(0);
     if ($header) {
         $links = $header->getElementsByTagName('a');
@@ -269,7 +274,7 @@ function end_output_buffer() {
     // Append the opening <div> tag to the end of the header content
     $content = preg_replace(
         '#(</header>)#i',
-        '$1<div id="swapper-loader">' . $loader . '<div id="swapper-site-content" hx-boost="true"><div' . $data_attributes . '>',
+        '$1<div id="swapper-loader">' . $loader . '<div id="swapper-site-content" hx-boost="true">',
         $content,
         1
     );
@@ -279,16 +284,31 @@ function end_output_buffer() {
     $escaped_ending_target_element = preg_quote($target_ending_element, '#');
 
     // Prepend the closing </div> tag to the start of the footer content
-    $content = preg_replace('#(<footer)#i', '</div></div></div>$1', $content, 1);
+    $content = preg_replace('#(<footer)#i', '</div></div>$1', $content, 1);
 
     if (isset($_SERVER['HTTP_HX_REQUEST'])) {
         // Strip content before the swapper-site div
         $content = preg_replace('/.*(<div id="swapper-site-content" hx-boost="true">)/is', '', $content);
 
-        $content = preg_replace('#</div></div></div><footer.*</footer>.*$#is', '', $content);
+        $content = preg_replace('#</div></div><footer.*</footer>.*$#is', '', $content);
     }
 
     // echo $changedComponents['head'];
+
+    if ($changedComponents['body']) {
+        $dom = new DOMDocument();
+        @$dom->loadHTML($changedComponents['body'], LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+        $body = $dom->getElementsByTagName('body')->item(0);
+
+        if ($body) {
+            $attributes = '';
+            foreach ($body->attributes as $attribute) {
+                $attributes .= $attribute->name . '="' . $attribute->value . '" ';
+            }
+
+            $content = '<div id="changed-body"><div ' . trim($attributes) . '></div></div>' . $content;
+        }
+    }
 
     if ($changedComponents['header']) {
         $dom_header = new DOMDocument();
@@ -302,6 +322,20 @@ function end_output_buffer() {
 
         $changedComponents['header'] = $dom_header->saveHTML();
         $content = '<div id="changed-header" style="display: none;">' . $changedComponents['header'] . '</div>' . $content;
+    }
+
+    if ($changedComponents['footer']) {
+        $dom_footer = new DOMDocument();
+        @$dom_footer->loadHTML($changedComponents['footer'], LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+
+        $links = $dom_footer->getElementsByTagName('a');
+        foreach ($links as $link) {
+            $link->setAttribute('hx-get', $link->getAttribute('href'));
+            $link->setAttribute('hx-push-url', 'true');
+        }
+
+        $changedComponents['footer'] = $dom_footer->saveHTML();
+        $content = $content . '<div id="changed-footer" style="display: none;"' . $changedComponents['footer'] . '</div>';
     }
 
     echo $content;
