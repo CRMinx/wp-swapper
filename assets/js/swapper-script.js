@@ -65,6 +65,53 @@ htmx.onLoad(function() {
             }
         }
 
+        if (xhr.getResponseHeader('X-Component-Changed-Footer-Scripts')) {
+            var newFooterScriptElements = document.querySelectorAll('#changed-footer-scripts');
+
+            //newFooterScriptElements.forEach((el, index) => console.log(`Element ${index}:`, el));
+            var newFooterScripts = newFooterScriptElements[0].querySelectorAll('script');
+
+            var currentFooterScriptsContainer = document.querySelector('body');
+
+            var oldFooterScripts = currentFooterScriptsContainer.querySelectorAll('script');
+            oldFooterScripts.forEach(script => script.remove());
+
+            function copyAttributes(oldScript, newScript) {
+                Array.from(oldScript.attributes).forEach(attr => {
+                    newScript.setAttribute(attr.name, attr.value);
+                });
+            }
+
+            function appendScriptsSequentially(scripts, index) {
+                if (index >= scripts.length) {
+                    return;
+                }
+
+                var script = scripts[index];
+                var newScriptElement = document.createElement('script');
+                copyAttributes(script, newScriptElement);
+
+                if (script.src) {
+                    newScriptElement.src = script.src;
+                    newScriptElement.onload = function() {
+                        appendScriptsSequentially(scripts, index + 1);
+                    };
+                    currentFooterScriptsContainer.appendChild(newScriptElement);
+                } else {
+                    newScriptElement.textContent = script.textContent;
+                    currentFooterScriptsContainer.appendChild(newScriptElement);
+                    appendScriptsSequentially(scripts, index + 1);
+                }
+            }
+
+            appendScriptsSequentially(newFooterScripts, 0);
+
+            while (newFooterScriptElements > 0) {
+                newFooterScriptElements[0].remove();
+            }
+        }
+
+
         document.addEventListener('htmx:beforeSwap', function(event) {
         if (xhr.getResponseHeader('X-Component-Changed-Head')) {
             var newHeadElements = document.querySelectorAll('#changed-head');

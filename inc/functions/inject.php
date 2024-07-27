@@ -343,7 +343,11 @@ function end_output_buffer() {
         }
 
         $changedComponents['footer'] = $dom_footer->saveHTML();
-        $content = $content . '<div id="changed-footer" style="display: none;"' . $changedComponents['footer'] . '</div>';
+        $content = $content . '<div id="changed-footer" style="display: none;">' . $changedComponents['footer'] . '</div>';
+    }
+
+    if ($changedComponents['footer_scripts']) {
+        $content = $content . '<div id="changed-footer-scripts" style="display: none;">' . $changedComponents['footer_scripts'] . '</div>';
     }
 
     echo $content;
