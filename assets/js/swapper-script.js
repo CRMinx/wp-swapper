@@ -64,6 +64,22 @@ htmx.onLoad(function() {
                 newBody.remove();
             }
         }
+
+        document.addEventListener('htmx:beforeSwap', function(event) {
+        if (xhr.getResponseHeader('X-Component-Changed-Head')) {
+            var newHeadElements = document.querySelectorAll('#changed-head');
+
+            if (newHeadElements.length > 1) {
+                newHeadElements.forEach((el, index) => console.log(`Element ${index}:`, el));
+            } else if (newHeadElements.length === 1) {
+                var newHead = newHeadElements[0];
+
+                document.head.innerHTML = newHead.innerHTML;
+
+                newHead.remove();
+            }
+        }
+        });
     });
     // Function to rebind DOMContentLoaded to htmx:afterSettle
     function rebindDOMContentLoaded() {

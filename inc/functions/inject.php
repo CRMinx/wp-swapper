@@ -295,6 +295,14 @@ function end_output_buffer() {
 
     // echo $changedComponents['head'];
 
+    if ($changedComponents['head']) {
+        $head = preg_replace('/^<head>|<\/head>$/', '', $changedComponents['head']);
+
+        if ($head) {
+            $content = '<div style="display: none;" id="changed-head">' . $head . '</div>' . $content;
+        }
+    }
+
     if ($changedComponents['body']) {
         $dom = new DOMDocument();
         @$dom->loadHTML($changedComponents['body'], LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
@@ -306,7 +314,7 @@ function end_output_buffer() {
                 $attributes .= $attribute->name . '="' . $attribute->value . '" ';
             }
 
-            $content = '<div id="changed-body"><div ' . trim($attributes) . '></div></div>' . $content;
+            $content = '<div style="display: none;" id="changed-body"><div ' . trim($attributes) . '></div></div>' . $content;
         }
     }
 
