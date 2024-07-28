@@ -84,6 +84,7 @@ htmx.onLoad(function() {
 
             function appendScriptsSequentially(scripts, index) {
                 if (index >= scripts.length) {
+                    document.dispatchEvent(new Event("htmx:beforeSwap"));
                     return;
                 }
 
@@ -128,32 +129,4 @@ htmx.onLoad(function() {
         }
         });
     });
-    // Function to rebind DOMContentLoaded to htmx:afterSettle
-    function rebindDOMContentLoaded() {
-        document.querySelectorAll("script").forEach(function(script) {
-            if (script.type === "text/javascript" || script.type === "") {
-                var newScript = document.createElement("script");
-                newScript.type = "text/javascript";
-                if (script.src) {
-                    newScript.src = script.src;
-                    newScript.onload = function() {
-                        document.dispatchEvent(new Event("htmx:afterSettle"));
-                    };
-                } else {
-                    newScript.text = script.innerHTML;
-                    document.dispatchEvent(new Event("htmx:afterSettle"));
-                }
-                script.parentNode.replaceChild(newScript, script);
-            }
-        });
-
-    // Initial rebinding
-    rebindDOMContentLoaded();
-
-    // Listen for htmx:afterSettle to rebind again
-    document.body.addEventListener("htmx:afterSettle", function() {
-        rebindDOMContentLoaded();
-    });
-};
 });
-

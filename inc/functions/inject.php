@@ -7,127 +7,14 @@ use WP_Swapper\Components\HeaderComponent;
 use WP_Swapper\Components\HeadComponent;
 use WP_Swapper\Components\BodyComponent;
 use WP_Swapper\Components\FooterScriptsComponent;
+use WP_Swapper\BotDetector;
+use WP_Swapper\HtmxHandler;
 
-require WP_SWAPPER_COMPONENTS_PATH . 'class-widget-component.php';
-require WP_SWAPPER_CLASSES_PATH . 'class-cache-handler.php';
+// Instantiate bot detector
+$bot_detector = new BotDetector();
 
-/**
-* Detects search engine bots
-*
-* @since 0.1
-*
-* @returns bool true if search engine bot is visiting site, otherwise false.
-*/
-function swapper_is_bot() {
-$bot_agents = [
-    'Googlebot',
-    'Bingbot',
-    'Slurp',
-    'DuckDuckBot',
-    'Baiduspider',
-    'YandexBot',
-    'Sogou',
-    'Exabot',
-    'facebot',
-    'ia_archiver',
-    'AhrefsBot',
-    'MJ12bot',
-    'SemrushBot',
-    'DotBot',
-    'SeznamBot',
-    'PiplBot',
-    'Mail.RU_Bot',
-    'SiteExplorer',
-    'Screaming Frog',
-    'LinkpadBot',
-    'SerpstatBot',
-    'MegaIndex',
-    'BLEXBot',
-    'Uptimebot',
-    'TurnitinBot',
-    'trendictionbot',
-    'VoilaBot',
-    'CommonCrawler',
-    'Lipperhey',
-    'Hatena',
-    'MegaIndex',
-    'WBSearchBot',
-    'ZoominfoBot',
-    'SentiBot',
-];
-    $user_agent = $_SERVER['HTTP_USER_AGENT'] ?? '';
-
-    foreach ( $bot_agents as $bot_agent ) {
-        if ( stripos($user_agent, $bot_agent) !== false ) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-/**
-* Imports frontend scripts
-*
-* @since 0.1
-*/
-function swapper_enqueue_frontend_scripts() {
-    wp_enqueue_script(
-        'htmx', //Handle for the script
-        'https://unpkg.com/htmx.org@2.0.1',
-        [],
-        '2.0.1',
-    );
-
-    wp_enqueue_script(
-        'swapper-script',
-        WP_SWAPPER_ASSETS_JS_URL . 'swapper-script.js',
-        null,
-        WP_SWAPPER_VERSION
-    );
-
-    wp_enqueue_style(
-        'swapper_loader_style',
-        WP_SWAPPER_ASSETS_CSS_URL . 'loader.css',
-        null,
-        WP_SWAPPER_VERSION
-    );
-}
-
-// Hook the function to wp_enqueue_scripts
-add_action( 'wp_enqueue_scripts', 'swapper_enqueue_frontend_scripts' );
-
-/**
-* Adds custom htmx attributes to the body class filter
-*
-* @since 0.1
-*
-* @param array $classes Array of body classes.
-* @param array $class Additional classes added to the body.
-*
-* @return array Modified array of body classes.
-*/
-function swapper_add_htmx_attributes_to_body($classes) {
-    if (swapper_is_bot()) {
-        return;
-    }
-
-    $attributes = array(
-        'hx-indicator="#swapper-loader"',
-        'hx-target="#swapper-site-content"',
-        'hx-swap="innerHTML show:window:top"'
-    );
-
-    //$attributes = array(
-    //    'hx-boost="true"',
-    //);
-
-    echo ' ' . implode(' ', $attributes);
-    return $classes;
-}
-
-// Hook the function to body_class
-add_filter('body_class', 'swapper_add_htmx_attributes_to_body', 20, 2);
+// Handle Htmx attributes
+new HtmxHandler($bot_detector);
 
 /**
 * Create a buffer
@@ -135,7 +22,9 @@ add_filter('body_class', 'swapper_add_htmx_attributes_to_body', 20, 2);
 * @since 0.1
 */
 function start_output_buffer() {
-    if (swapper_is_bot()) {
+    global $bot_detector;
+
+    if ($bot_detector->is_bot()) {
         return;
     }
     ob_start();
@@ -149,7 +38,9 @@ function start_output_buffer() {
 * @returns string added opening and closing div tags
 */
 function end_output_buffer() {
-    if (swapper_is_bot()) {
+    global $bot_detector;
+
+    if ($bot_detector->is_bot()) {
         return;
     }
 
