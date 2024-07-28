@@ -9,6 +9,7 @@ return array(
     'CacheHandler' => $baseDir . '/inc/classes/class-cache-handler.php',
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
     'WP_Swapper\\BotDetector' => $baseDir . '/inc/classes/class-bot-detector.php',
+    'WP_Swapper\\BufferHandler' => $baseDir . '/inc/classes/class-buffer-handler.php',
     'WP_Swapper\\Components\\BodyComponent' => $baseDir . '/inc/classes/components/class-body-component.php',
     'WP_Swapper\\Components\\FooterComponent' => $baseDir . '/inc/classes/components/class-footer-component.php',
     'WP_Swapper\\Components\\FooterScriptsComponent' => $baseDir . '/inc/classes/components/class-footer-scripts-component.php',

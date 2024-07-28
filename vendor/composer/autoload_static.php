@@ -32,6 +32,7 @@ class ComposerStaticInit4d03512804b377c2c83ccf76086d1139
         'CacheHandler' => __DIR__ . '/../..' . '/inc/classes/class-cache-handler.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'WP_Swapper\\BotDetector' => __DIR__ . '/../..' . '/inc/classes/class-bot-detector.php',
+        'WP_Swapper\\BufferHandler' => __DIR__ . '/../..' . '/inc/classes/class-buffer-handler.php',
         'WP_Swapper\\Components\\BodyComponent' => __DIR__ . '/../..' . '/inc/classes/components/class-body-component.php',
         'WP_Swapper\\Components\\FooterComponent' => __DIR__ . '/../..' . '/inc/classes/components/class-footer-component.php',
         'WP_Swapper\\Components\\FooterScriptsComponent' => __DIR__ . '/../..' . '/inc/classes/components/class-footer-scripts-component.php',

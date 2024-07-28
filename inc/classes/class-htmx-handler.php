@@ -2,8 +2,6 @@
 
 namespace WP_Swapper;
 
-use WP_Swapper\BotDetector;
-
 /**
 * Class to instantiate HTMX attributes
 *

@@ -9,6 +9,7 @@ use WP_Swapper\Components\BodyComponent;
 use WP_Swapper\Components\FooterScriptsComponent;
 use WP_Swapper\BotDetector;
 use WP_Swapper\HtmxHandler;
+use WP_Swapper\BufferHandler;
 
 // Instantiate bot detector
 $bot_detector = new BotDetector();
@@ -16,19 +17,9 @@ $bot_detector = new BotDetector();
 // Handle Htmx attributes
 new HtmxHandler($bot_detector);
 
-/**
-* Create a buffer
-*
-* @since 0.1
-*/
-function start_output_buffer() {
-    global $bot_detector;
+$buffer_handler = new BufferHandler($bot_detector);
 
-    if ($bot_detector->is_bot()) {
-        return;
-    }
-    ob_start();
-}
+$buffer_handler->start_output_buffer();
 
 /**
 * End the buffer and wrap changed content
@@ -245,9 +236,6 @@ function end_output_buffer() {
     //echo $changedComponents['footer'];
     //echo $changedComponents['footer_scripts'];
 }
-
-// Hook into template_redirect to start output buffering
-add_action('template_redirect', 'start_output_buffer');
 
 // Hook into wp_footer to end output buffering and send output
 add_action('wp_print_footer_scripts', 'end_output_buffer');
