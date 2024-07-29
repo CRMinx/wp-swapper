@@ -53,6 +53,43 @@ class ContentProcessor {
     }
 
     /**
+     * Create wrapper
+     *
+     * @param $content
+     *
+     * @return string
+     */
+    private function create_wrapper($content) {
+        $loader = wp_swapper_get_loading_icon();
+
+        $content = preg_replace(
+            '#(</header>)#i',
+            '$1<div id="swapper-loader">' . $loader . '<div id="swapper-site-content" hx-boost="true">',
+            $content,
+            1
+        );
+
+        $content = preg_replace('#(<footer)#i', '</div></div>$1', $content, 1);
+
+        return $content;
+    }
+
+    /**
+     * Remove header and footer from around content
+     *
+     * @param $content
+     *
+     * @return string
+     */
+    private function remove_content_wrapper($content) {
+        $content = preg_replace('/.*(<div id="swapper-site-content" hx-boost="true">)/is', '', $content);
+
+        $content = preg_replace('#</div></div><footer.*</footer>.*$#is', '', $content);
+
+        return $content;
+    }
+
+    /**
     * Process the content and handle component changes
     *
     * @param string $content
@@ -72,71 +109,59 @@ class ContentProcessor {
         $footer = $dom->getElementsByTagName('footer')->item(0);
         $this->swap_links($footer);
 
-
         $content = $dom->saveHTML();
 
-        $loader = wp_swapper_get_loading_icon();
-
-        $content = preg_replace(
-            '#(</header>)#i',
-            '$1<div id="swapper-loader">' . $loader . '<div id="swapper-site-content" hx-boost="true">',
-            $content,
-            1
-        );
-
-        $content = preg_replace('#(<footer)#i', '</div></div>$1', $content, 1);
+        $content = $this->create_wrapper($content);
 
         if (isset($_SERVER['HTTP_HX_REQUEST'])) {
-            $content = preg_replace('/.*(<div id="swapper-site-content" hx-boost="true">)/is', '', $content);
+            $content = $this->remove_content_wrapper($content);
 
-            $content = preg_replace('#</div></div><footer.*</footer>.*$#is', '', $content);
-        }
+            if ($changedComponents['HeadComponent']) {
+                $head = preg_replace('/^<head>|<\/head>$/', '', $changedComponents['HeadComponent']);
 
-        if ($changedComponents['HeadComponent']) {
-            $head = preg_replace('/^<head>|<\/head>$/', '', $changedComponents['HeadComponent']);
-
-            if ($head) {
-                $content = '<div style="display: none;" id="changed-head">' . $head . '</div>' . $content;
-            }
-        }
-
-        if ($changedComponents['BodyComponent']) {
-            $dom = new DOMDocument();
-            @$dom->loadHTML($changedComponents['BodyComponent'], LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
-            $body = $dom->getElementsByTagName('body')->item(0);
-
-            if ($body) {
-                $attributes = '';
-                foreach ($body->attributes as $attribute) {
-                    $attributes .= $attribute->name . '="' . $attribute->value . '" ';
+                if ($head) {
+                    $content = '<div style="display: none;" id="changed-head">' . $head . '</div>' . $content;
                 }
-
-                $content = '<div style="display: none;" id="changed-body"><div ' . trim($attributes) . '></div></div>' . $content;
             }
-        }
 
-        if ($changedComponents['HeaderComponent']) {
-            $dom_header = new DOMDocument();
-            @$dom_header->loadHTML($changedComponents['HeaderComponent'], LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+            if ($changedComponents['BodyComponent']) {
+                $dom = new DOMDocument();
+                @$dom->loadHTML($changedComponents['BodyComponent'], LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+                $body = $dom->getElementsByTagName('body')->item(0);
 
-            $this->swap_links($dom_header);
+                if ($body) {
+                    $attributes = '';
+                    foreach ($body->attributes as $attribute) {
+                        $attributes .= $attribute->name . '="' . $attribute->value . '" ';
+                    }
 
-            $changedComponents['HeaderComponent'] = $dom_header->saveHTML();
-            $content = '<div id="changed-header" style="display: none;">' . $changedComponents['HeaderComponent'] . '</div>' . $content;
-        }
+                    $content = '<div style="display: none;" id="changed-body"><div ' . trim($attributes) . '></div></div>' . $content;
+                }
+            }
 
-        if ($changedComponents['FooterComponent']) {
-            $dom_footer = new DOMDocument();
-            @$dom_footer->loadHTML($changedComponents['FooterComponent'], LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+            if ($changedComponents['HeaderComponent']) {
+                $dom_header = new DOMDocument();
+                @$dom_header->loadHTML($changedComponents['HeaderComponent'], LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
 
-            $this->swap_links($dom_footer);
+                $this->swap_links($dom_header);
 
-            $changedComponents['FooterComponent'] = $dom_footer->saveHTML();
-            $content = $content . '<div id="changed-footer" style="display: none;">' . $changedComponents['FooterComponent'] . '</div>';
-        }
+                $changedComponents['HeaderComponent'] = $dom_header->saveHTML();
+                $content = '<div id="changed-header" style="display: none;">' . $changedComponents['HeaderComponent'] . '</div>' . $content;
+            }
 
-        if ($changedComponents['FooterScriptsComponent']) {
-            $content = $content . '<div id="changed-footer-scripts" style="display: none;">' . $changedComponents['FooterScriptsComponent'] . '</div>';
+            if ($changedComponents['FooterComponent']) {
+                $dom_footer = new DOMDocument();
+                @$dom_footer->loadHTML($changedComponents['FooterComponent'], LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+
+                $this->swap_links($dom_footer);
+
+                $changedComponents['FooterComponent'] = $dom_footer->saveHTML();
+                $content = $content . '<div id="changed-footer" style="display: none;">' . $changedComponents['FooterComponent'] . '</div>';
+            }
+
+            if ($changedComponents['FooterScriptsComponent']) {
+                $content = $content . '<div id="changed-footer-scripts" style="display: none;">' . $changedComponents['FooterScriptsComponent'] . '</div>';
+            }
         }
 
         return $content;
