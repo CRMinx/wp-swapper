@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
-        'name' => 'damofd/wp-swapper',
+        'name' => 'crminx/wp-swapper',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'c250a6ee2401569ea4f6e24ed6a63b33bd53aef8',
+        'reference' => '9bf8dedefb0b77907505942cc6ccd7ae13fadc3e',
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -70,10 +70,10 @@
                 0 => '*',
             ),
         ),
-        'damofd/wp-swapper' => array(
+        'crminx/wp-swapper' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'c250a6ee2401569ea4f6e24ed6a63b33bd53aef8',
+            'reference' => '9bf8dedefb0b77907505942cc6ccd7ae13fadc3e',
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

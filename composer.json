@@ -1,5 +1,5 @@
 {
-    "name": "damofd/wp-swapper",
+    "name": "crminx/wp-swapper",
     "description": "Content Swapping Plugin for WordPress",
     "keywords": [
         "wordpress",
@@ -18,8 +18,8 @@
     ],
     "type": "wordpress-plugin",
     "support": {
-        "issues": "https://github.com/DamoFD/wp-swapper/issues",
-        "source": "https://github.com/DamoFD/wp-swapper"
+        "issues": "https://github.com/CRMinx/wp-swapper/issues",
+        "source": "https://github.com/CRMinx/wp-swapper"
     },
     "repositories": [
         {
