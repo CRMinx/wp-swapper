@@ -15,4 +15,9 @@ class SampleTest extends TestCase
     {
         $this->assertTrue(true);
     }
+
+    public function testSample2()
+    {
+        $this->assertTrue(true);
+    }
 }
