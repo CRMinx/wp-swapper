@@ -1,3 +1,6 @@
+![Build Status](https://github.com/CRMinx/wp-swapper/actions/workflows/php.yml/badge.svg)
+
+
 # Welcome to the WP Swapper Github Repository!
 
 We aim to make your wordpress site faster and create a better use experience! This is why we created *WP Swapper*. A plugin that converts your site into components that swap out if changed. No more full page reloads!
