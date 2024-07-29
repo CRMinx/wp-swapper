@@ -76,6 +76,3 @@ class Enqueue {
         wp_enqueue_script('swapper_script');
     }
 }
-
-// Instantiate the Enqueue class to hook into Wordpress
-new \WP_Swapper\Enqueue();

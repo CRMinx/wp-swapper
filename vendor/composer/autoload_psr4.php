@@ -12,10 +12,12 @@ return array(
     'Symfony\\Component\\Yaml\\' => array($vendorDir . '/symfony/yaml'),
     'PhpParser\\' => array($vendorDir . '/nikic/php-parser/lib/PhpParser'),
     'Noodlehaus\\' => array($vendorDir . '/hassankhan/config/src'),
+    'Mockery\\' => array($vendorDir . '/mockery/mockery/library/Mockery'),
     'Doctrine\\Instantiator\\' => array($vendorDir . '/doctrine/instantiator/src/Doctrine/Instantiator'),
     'DeepCopy\\' => array($vendorDir . '/myclabs/deep-copy/src/DeepCopy'),
     'Composer\\Installers\\' => array($vendorDir . '/composer/installers/src/Composer/Installers'),
     'Codedungeon\\PHPUnitPrettyResultPrinter\\' => array($vendorDir . '/codedungeon/phpunit-result-printer/src'),
     'Codedungeon\\PHPCliColors\\' => array($vendorDir . '/codedungeon/php-cli-colors/src'),
+    'Brain\\Monkey\\' => array($vendorDir . '/brain/monkey/src'),
     'Bakyt\\' => array($vendorDir . '/2bj/phanybar/src'),
 );

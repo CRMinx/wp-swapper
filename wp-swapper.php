@@ -3,7 +3,7 @@
 * Plugin Name: WP Swapper
 * Plugin URI: https://wpswapper.com
 * Description: Increase speed by swapping content that changes instead of full page reloads.
-* Version: 0.1.0
+* Version: 0.0.1
 * Requires at least: 5.8
 * Requires PHP: 7.3
 * Author: WP Swapper
@@ -21,7 +21,7 @@ defined( 'ABSPATH' ) || exit;
 session_start();
 
 // Swapper defines.
-define( 'WP_SWAPPER_VERSION',              '0.1.0' );
+define( 'WP_SWAPPER_VERSION',              '0.0.1' );
 define( 'WP_SWAPPER_WP_VERSION',           '5.8' );
 define( 'WP_SWAPPER_WP_VERSION_TESTED',    '6.5.5' );
 define( 'WP_SWAPPER_PHP_VERSION',          '7.3' );
