@@ -7,10 +7,21 @@ use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use Brain\Monkey;
 use Brain\Monkey\Functions;
 
+/**
+* Parent test case class
+*
+* @since 0.0.1
+*/
 class TestCase extends PHPUnitTestCase
 {
     use MockeryPHPUnitIntegration;
 
+    /**
+    * set up parent and monkey
+    * define WP functions that are undefined without WP core.
+    *
+    * @since 0.0.1
+    */
     protected function setUp(): void
     {
         parent::setUp();
@@ -19,6 +30,11 @@ class TestCase extends PHPUnitTestCase
         Functions\when('esc_url')->returnArg();
     }
 
+    /**
+    * tear down parent and monkey
+    *
+    * @since 0.0.1
+    */
     protected function tearDown(): void
     {
         Monkey\tearDown();

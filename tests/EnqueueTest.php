@@ -5,8 +5,18 @@ namespace WP_Swapper\Tests;
 use Brain\Monkey\Functions;
 use WP_Swapper\Enqueue;
 
+/**
+* Test Enqueue Scripts
+*
+* @since 0.0.1
+*/
 class EnqueueTest extends TestCase
 {
+    /**
+    * Ensure scripts are enqueued
+    *
+    * @since 0.0.1
+    */
     public function testEnqueueScriptsAndStyles()
     {
         $enqueue = new Enqueue();
@@ -14,6 +24,11 @@ class EnqueueTest extends TestCase
         $this->assertNotFalse(has_action('wp_enqueue_scripts', [$enqueue, 'register_scripts']));
     }
 
+    /**
+    * Ensure correct styles are registered.
+    *
+    * @since 0.0.1
+    */
     public function testRegisterStyles()
     {
         Functions\expect('wp_register_style')
@@ -32,6 +47,11 @@ class EnqueueTest extends TestCase
         $enqueue->register_styles();
     }
 
+    /**
+    * Ensure correct scripts are registered.
+    *
+    * @since 0.0.1
+    */
     public function testRegisterScripts()
     {
         Functions\expect('wp_register_script')
