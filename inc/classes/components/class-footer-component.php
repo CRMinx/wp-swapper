@@ -2,7 +2,6 @@
 
 namespace WP_Swapper\Components;
 
-use WP_Swapper\Traits\CacheHandlerTrait;
 use DOMDocument;
 
 /**
@@ -10,31 +9,7 @@ use DOMDocument;
 *
 * @since 0.1
 */
-
-class FooterComponent {
-
-    use CacheHandlerTrait;
-
-    /**
-    * Buffer content
-    *
-    * @since 0.1
-    *
-    * @var string
-    */
-    private $content;
-
-    /**
-    * Constructor
-    *
-    * @since 0.1
-    *
-    * @param string $html
-    */
-    public function __construct($html) {
-        $this->content = $this->extractFooterContent($html);
-    }
-
+class FooterComponent extends Component {
     /**
      *  Extract the content between the <footer> tags
      *
@@ -44,22 +19,11 @@ class FooterComponent {
      *
      *  @returns string <footer> tag of the document.
      */
-    private function extractFooterContent($html) {
+    protected function extractContent($html) {
         $dom = new DOMDocument();
         @$dom->loadHTML($html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
         $footer = $dom->getElementsByTagName('footer')->item(0);
         return $footer ? $dom->saveHTML($footer) : '';
-    }
-
-    /**
-    * Get the extracted footer content
-    *
-    * @since 0.1
-    *
-    * @returns string
-    */
-    public function getContent() {
-        return $this->content;
     }
 
     /**

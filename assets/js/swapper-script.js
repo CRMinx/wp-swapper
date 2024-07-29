@@ -2,7 +2,7 @@ htmx.onLoad(function() {
     document.body.addEventListener('htmx:afterSwap', function(evt) {
         var xhr = evt.detail.xhr;
 
-        if (xhr.getResponseHeader('X-Component-Changed-Header')) {
+        if (xhr.getResponseHeader('X-Component-Changed-HeaderComponent')) {
 
             var newHeaderElements = document.querySelectorAll('#changed-header');
 
@@ -23,7 +23,7 @@ htmx.onLoad(function() {
             }
         }
 
-        if (xhr.getResponseHeader('X-Component-Changed-Footer')) {
+        if (xhr.getResponseHeader('X-Component-Changed-FooterComponent')) {
 
             var newFooterElements = document.querySelectorAll('#changed-footer');
 
@@ -44,7 +44,7 @@ htmx.onLoad(function() {
             }
         }
 
-        if (xhr.getResponseHeader('X-Component-Changed-Body')) {
+        if (xhr.getResponseHeader('X-Component-Changed-BodyComponent')) {
             var newBodyElements = document.querySelectorAll('#changed-body');
 
             if (newBodyElements.length > 1) {
@@ -65,7 +65,7 @@ htmx.onLoad(function() {
             }
         }
 
-        if (xhr.getResponseHeader('X-Component-Changed-Footer-Scripts')) {
+        if (xhr.getResponseHeader('X-Component-Changed-FooterScriptsComponent')) {
             var newFooterScriptElements = document.querySelectorAll('#changed-footer-scripts');
 
             //newFooterScriptElements.forEach((el, index) => console.log(`Element ${index}:`, el));
@@ -84,6 +84,7 @@ htmx.onLoad(function() {
 
             function appendScriptsSequentially(scripts, index) {
                 if (index >= scripts.length) {
+                    document.dispatchEvent(new Event("htmx:beforeSwap"));
                     return;
                 }
 
@@ -128,32 +129,4 @@ htmx.onLoad(function() {
         }
         });
     });
-    // Function to rebind DOMContentLoaded to htmx:afterSettle
-    function rebindDOMContentLoaded() {
-        document.querySelectorAll("script").forEach(function(script) {
-            if (script.type === "text/javascript" || script.type === "") {
-                var newScript = document.createElement("script");
-                newScript.type = "text/javascript";
-                if (script.src) {
-                    newScript.src = script.src;
-                    newScript.onload = function() {
-                        document.dispatchEvent(new Event("htmx:afterSettle"));
-                    };
-                } else {
-                    newScript.text = script.innerHTML;
-                    document.dispatchEvent(new Event("htmx:afterSettle"));
-                }
-                script.parentNode.replaceChild(newScript, script);
-            }
-        });
-
-    // Initial rebinding
-    rebindDOMContentLoaded();
-
-    // Listen for htmx:afterSettle to rebind again
-    document.body.addEventListener("htmx:afterSettle", function() {
-        rebindDOMContentLoaded();
-    });
-};
 });
-
