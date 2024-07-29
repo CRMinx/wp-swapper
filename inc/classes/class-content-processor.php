@@ -142,6 +142,13 @@ class ContentProcessor {
         return $content;
     }
 
+    /**
+    * Add hx-get to links
+    *
+    * @param $element the element that contains a elements
+    *
+    * @return void
+    */
     private function swap_links($element) {
         if ($element) {
             $links = $element->getElementsByTagName('a');
