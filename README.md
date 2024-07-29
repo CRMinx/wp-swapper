@@ -2,6 +2,8 @@
 ![License](https://img.shields.io/github/license/CRMinx/wp-swapper)
 ![GitHub stars](https://img.shields.io/github/stars/CRMinx/wp-swapper?style=social)
 ![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/CRMinx/wp-swapper?label=version&sort=semver)
+![WordPress Compatibility](https://img.shields.io/badge/WordPress-%3E%3D%205.0-blue)
+
 
 
 
