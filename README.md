@@ -1,4 +1,6 @@
 ![Build Status](https://github.com/CRMinx/wp-swapper/actions/workflows/php.yml/badge.svg)
+![License](https://img.shields.io/github/license/CRMinx/wp-swapper)
+
 
 
 # Welcome to the WP Swapper Github Repository!
