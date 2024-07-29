@@ -1,6 +1,8 @@
 ![Build Status](https://github.com/CRMinx/wp-swapper/actions/workflows/php.yml/badge.svg)
 ![License](https://img.shields.io/github/license/CRMinx/wp-swapper)
 ![GitHub stars](https://img.shields.io/github/stars/CRMinx/wp-swapper?style=social)
+![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/CRMinx/wp-swapper?label=version&sort=semver)
+
 
 
 
