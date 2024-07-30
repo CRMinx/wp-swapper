@@ -5,12 +5,12 @@ namespace WP_Swapper;
 use WP_Swapper\Traits\Dom_Handler;
 use DOMDocument;
 
-class ContentProcessor {
+class Content_Processor {
 
     use Dom_Handler;
 
     /**
-    * Process the content and handle component changes
+    * Process the content and edit the DOM
     *
     * @param string $content
     * @return string Processed content

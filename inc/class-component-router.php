@@ -9,7 +9,7 @@ use WP_Swapper\Controllers\Footer_Controller;
 use WP_Swapper\Controllers\Scripts_Controller;
 use WP_Swapper\Handlers\Buffer_Handler;
 use WP_Swapper\Traits\Bot_Handler;
-use WP_Swapper\ContentProcessor;
+use WP_Swapper\Content_Processor;
 
 class Component_Router {
 
@@ -21,7 +21,7 @@ class Component_Router {
 
     public function __construct() {
         $this->buffer_handler = new Buffer_Handler();
-        $this->content_processor = new ContentProcessor();
+        $this->content_processor = new Content_Processor();
         if (!$this->is_bot()) {
             add_action('template_redirect', [$this, 'start_buffer']);
             add_action('wp_print_footer_scripts', [$this, 'process_content']);
