@@ -1,33 +1,33 @@
 <?php
 
-namespace WP_Swapper\Components;
+namespace WP_Swapper\Models;
 
 use DOMDocument;
 
 /**
-* Class to handle header component
+* Class to handle footer model
 *
 * @since 0.1
 */
-class HeaderComponent extends Component {
+class Footer extends Model {
     /**
-     *  Extract the content between the <header> tags
+     *  Extract the content between the <footer> tags
      *
      * @since 0.1
      *
      *  @param string $html
      *
-     *  @returns string <header> tag of the document.
+     *  @returns string <footer> tag of the document.
      */
     protected function extractContent($html) {
         $dom = new DOMDocument();
         @$dom->loadHTML($html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
-        $header = $dom->getElementsByTagName('header')->item(0);
-        return $header ? $dom->saveHTML($header) : '';
+        $footer = $dom->getElementsByTagName('footer')->item(0);
+        return $footer ? $dom->saveHTML($footer) : '';
     }
 
     /**
-    * Remove white space and html attributes from header
+    * Remove white space and html attributes from footer
     *
     * @since 0.1
     *

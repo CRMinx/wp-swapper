@@ -2,15 +2,17 @@
 
 namespace WP_Swapper\Tests;
 
-use WP_Swapper\BotDetector;
+use WP_Swapper\Traits\Bot_Handler;
 
 /**
-* Bot Detector Class
+* Bot Detector Tests
 *
 * @since 0.0.1
 */
-class BotDetectorTest extends TestCase
+class Bot_Handler_Test extends TestCase
 {
+    use Bot_Handler;
+
     /**
     * Reset user agent on setup
     *
@@ -42,8 +44,7 @@ class BotDetectorTest extends TestCase
     {
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3';
 
-        $botDetector = new BotDetector();
-        $this->assertFalse($botDetector->is_bot());
+        $this->assertFalse($this->is_bot());
     }
 
     /**
@@ -55,8 +56,7 @@ class BotDetectorTest extends TestCase
     {
         $_SERVER['HTTP_USER_AGENT'] = '';
 
-        $botDetector = new BotDetector();
-        $this->assertFalse($botDetector->is_bot());
+        $this->assertFalse($this->is_bot());
     }
 
     /**
@@ -68,7 +68,6 @@ class BotDetectorTest extends TestCase
     {
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (compatible; Bingbot/2.0; +http://www.bing.com/bingbot.htm)';
 
-        $botDetector = new BotDetector();
-        $this->assertTrue($botDetector->is_bot());
+        $this->assertTrue($this->is_bot());
     }
 }

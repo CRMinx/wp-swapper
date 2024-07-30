@@ -1,15 +1,15 @@
 <?php
 
-namespace WP_Swapper\Components;
+namespace WP_Swapper\Models;
 
 use DOMDocument;
 
 /**
-* Class to handle footer scripts component
+* Class to handle scripts Model
 *
 * @since 0.1
 */
-class FooterScriptsComponent extends Component {
+class Scripts extends Model {
     /**
      *  Extract the content between the footer <script> tags
      *

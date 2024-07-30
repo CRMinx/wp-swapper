@@ -1,31 +1,24 @@
 <?php
 
-namespace WP_Swapper;
+namespace WP_Swapper\Handlers;
+
+use WP_Swapper\Traits\Bot_Handler;
 
 /**
 * Class to instantiate HTMX attributes
 *
 * @since 0.0.1
 */
-class HtmxHandler {
-    /**
-    * Bot detector instance
-    *
-    * @since 0.0.1
-    *
-    * @var BotDetector
-    */
-    private $bot_detector;
+class Htmx_Handler {
+
+    use Bot_Handler;
 
     /**
     * Constructor
     *
     * @since 0.0.1
-    *
-    * @param BotDetector $bot_detector
     */
-    public function __construct(BotDetector $bot_detector) {
-        $this->bot_detector = $bot_detector;
+    public function __construct() {
         add_filter('body_class', [$this, 'add_htmx_attributes_to_body'], 20, 2);
     }
 
@@ -39,7 +32,7 @@ class HtmxHandler {
     * @return array Modified array of body attributes.
     */
     public function add_htmx_attributes_to_body($classes) {
-        if ($this->bot_detector->is_bot()) {
+        if ($this->is_bot()) {
             return $classes;
         }
 

@@ -1,41 +1,29 @@
 <?php
 
-namespace WP_Swapper\Components;
+namespace WP_Swapper\Models;
 
 use DOMDocument;
 
 /**
-* Class to handle body component
+* Class to handle header model
 *
 * @since 0.1
 */
-class BodyComponent extends Component {
+class Header extends Model {
     /**
-     *  Extract the attributes from the <body> tag
+     *  Extract the content between the <header> tags
      *
      * @since 0.1
      *
      *  @param string $html
      *
-     *  @returns string <body> tag of the document.
+     *  @returns string <header> tag of the document.
      */
     protected function extractContent($html) {
         $dom = new DOMDocument();
         @$dom->loadHTML($html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
-        $body = $dom->getElementsByTagName('body')->item(0);
-
-        if ($body) {
-            $bodyContent = '<body';
-
-            foreach ($body->attributes as $attribute) {
-                $bodyContent .= ' ' . $attribute->name . '="' . $attribute->value . '"';
-            }
-
-            $bodyContent .= '>';
-            return $bodyContent;
-        }
-
-        return '';
+        $header = $dom->getElementsByTagName('header')->item(0);
+        return $header ? $dom->saveHTML($header) : '';
     }
 
     /**
@@ -48,6 +36,9 @@ class BodyComponent extends Component {
     protected function normalizeContent($content) {
         // Remove extra whitespace, newlines, and tabs
         $normalizedContent = preg_replace('/\s+/', ' ', trim($content));
+
+        // Strip all HTML attributes
+        $normalizedContent = preg_replace('/<(\w+)([^>]*?)>/', '<$1>', $normalizedContent);
 
         return $normalizedContent;
     }

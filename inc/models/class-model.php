@@ -1,17 +1,17 @@
 <?php
 
-namespace WP_Swapper\Components;
+namespace WP_Swapper\Models;
 
-use WP_Swapper\Traits\CacheHandlerTrait;
+use WP_Swapper\Traits\Cache_Handler;
 
 /**
-* Class for handling Components
+* Abstract class for interacting with models
 *
 * @since 0.0.1
 */
-abstract class Component {
-
-    use CacheHandlerTrait;
+abstract class Model
+{
+    use Cache_Handler;
 
     /**
     * Buffer content
@@ -34,7 +34,7 @@ abstract class Component {
     }
 
     /**
-    * Extract the content for the specific component
+    * Extract the content for the specific model
     *
     * @since 0.0.1
     *

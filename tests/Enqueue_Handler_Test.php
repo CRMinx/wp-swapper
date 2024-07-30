@@ -3,14 +3,14 @@
 namespace WP_Swapper\Tests;
 
 use Brain\Monkey\Functions;
-use WP_Swapper\Enqueue;
+use WP_Swapper\Handlers\Enqueue_Handler;
 
 /**
 * Test Enqueue Scripts
 *
 * @since 0.0.1
 */
-class EnqueueTest extends TestCase
+class Enqueue_Handler_Test extends TestCase
 {
     /**
     * Ensure scripts are enqueued
@@ -19,9 +19,9 @@ class EnqueueTest extends TestCase
     */
     public function testEnqueueScriptsAndStyles()
     {
-        $enqueue = new Enqueue();
-        $this->assertNotFalse(has_action('wp_enqueue_scripts', [$enqueue, 'register_styles']));
-        $this->assertNotFalse(has_action('wp_enqueue_scripts', [$enqueue, 'register_scripts']));
+        $enqueue_handler = new Enqueue_Handler();
+        $this->assertNotFalse(has_action('wp_enqueue_scripts', [$enqueue_handler, 'register_styles']));
+        $this->assertNotFalse(has_action('wp_enqueue_scripts', [$enqueue_handler, 'register_scripts']));
     }
 
     /**
@@ -43,8 +43,8 @@ class EnqueueTest extends TestCase
             ->once()
             ->with('swapper_loader_style');
 
-        $enqueue = new Enqueue();
-        $enqueue->register_styles();
+        $enqueue_handler = new Enqueue_Handler();
+        $enqueue_handler->register_styles();
     }
 
     /**
@@ -77,7 +77,7 @@ class EnqueueTest extends TestCase
             ->once()
             ->with('swapper_script');
 
-        $enqueue = new Enqueue();
-        $enqueue->register_scripts();
+        $enqueue_handler = new Enqueue_Handler();
+        $enqueue_handler->register_scripts();
     }
 }

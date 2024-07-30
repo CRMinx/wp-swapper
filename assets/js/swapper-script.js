@@ -2,7 +2,7 @@ htmx.onLoad(function() {
     document.body.addEventListener('htmx:afterSwap', function(evt) {
         var xhr = evt.detail.xhr;
 
-        if (xhr.getResponseHeader('X-Component-Changed-HeaderComponent')) {
+        if (xhr.getResponseHeader('X-Component-Changed-Header')) {
 
             var newHeaderElements = document.querySelectorAll('#changed-header');
 
@@ -23,7 +23,7 @@ htmx.onLoad(function() {
             }
         }
 
-        if (xhr.getResponseHeader('X-Component-Changed-FooterComponent')) {
+        if (xhr.getResponseHeader('X-Component-Changed-Footer')) {
 
             var newFooterElements = document.querySelectorAll('#changed-footer');
 
@@ -44,7 +44,7 @@ htmx.onLoad(function() {
             }
         }
 
-        if (xhr.getResponseHeader('X-Component-Changed-BodyComponent')) {
+        if (xhr.getResponseHeader('X-Component-Changed-Body')) {
             var newBodyElements = document.querySelectorAll('#changed-body');
 
             if (newBodyElements.length > 1) {
@@ -65,7 +65,7 @@ htmx.onLoad(function() {
             }
         }
 
-        if (xhr.getResponseHeader('X-Component-Changed-FooterScriptsComponent')) {
+        if (xhr.getResponseHeader('X-Component-Changed-Scripts')) {
             var newFooterScriptElements = document.querySelectorAll('#changed-footer-scripts');
 
             //newFooterScriptElements.forEach((el, index) => console.log(`Element ${index}:`, el));
