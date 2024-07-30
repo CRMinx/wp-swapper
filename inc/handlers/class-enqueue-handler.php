@@ -1,6 +1,6 @@
 <?php
 
-namespace WP_Swapper;
+namespace WP_Swapper\Handlers;
 
 /**
 * Class to enqueue scripts and styles
@@ -8,7 +8,7 @@ namespace WP_Swapper;
 * @since 0.0.1
 */
 
-class Enqueue {
+class Enqueue_Handler {
     /**
     * Constructor
     *

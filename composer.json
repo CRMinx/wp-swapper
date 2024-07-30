@@ -41,7 +41,7 @@
     },
     "autoload": {
         "classmap": [
-            "inc/classes"
+            "inc/"
         ],
         "psr-4": {
             "WP_Swapper\\": "inc/"

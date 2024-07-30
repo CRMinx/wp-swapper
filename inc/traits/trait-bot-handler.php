@@ -1,13 +1,13 @@
 <?php
 
-namespace WP_Swapper;
+namespace WP_Swapper\Traits;
 
 /**
 * Class to detect search engine bots
 *
 * @since 0.1
 */
-class BotDetector {
+trait Bot_Handler {
     /**
     * List of known bot user agents
     *

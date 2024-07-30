@@ -7,7 +7,7 @@ namespace WP_Swapper\Traits;
 *
 * @since 0.1
 */
-trait CacheHandlerTrait {
+trait Cache_Handler {
     /**
     * Cache component in session
     *

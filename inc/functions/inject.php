@@ -2,23 +2,17 @@
 
 defined( 'ABSPATH' ) || exit;
 
-use WP_Swapper\BotDetector;
-use WP_Swapper\HtmxHandler;
-use WP_Swapper\BufferHandler;
-use WP_Swapper\ContentProcessor;
-use WP_Swapper\Enqueue;
+use WP_Swapper\Handlers\Enqueue_Handler;
+use WP_Swapper\Handlers\Htmx_Handler;
+use WP_Swapper\Component_Router;
 
-new Enqueue();
-
-// Instantiate bot detector
-$bot_detector = new BotDetector();
+// Enqueue Scripts
+new Enqueue_Handler();
 
 // Handle Htmx attributes
-new HtmxHandler($bot_detector);
+new Htmx_Handler();
 
-$content_processor = new ContentProcessor();
-
-new BufferHandler($bot_detector, $content_processor);
+new Component_Router();
 
 function wp_swapper_get_loading_icon() {
     $icon_option = get_option('wp_swapper_loading_icon', 'spinner');
