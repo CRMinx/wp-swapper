@@ -2,8 +2,7 @@
 
 namespace WP_Swapper\Tests;
 
-use WP_Swapper\BotDetector;
-use WP_Swapper\HtmxHandler;
+use WP_Swapper\Handlers\Htmx_Handler;
 use Mockery;
 
 /**
@@ -11,7 +10,7 @@ use Mockery;
 *
 * @since 0.0.1
 */
-class HtmxHandlerTest extends TestCase
+class Htmx_Handler_Test extends TestCase
 {
     /**
     * Create mock of bot detector
@@ -24,9 +23,9 @@ class HtmxHandlerTest extends TestCase
     */
     private function mockBotDetector($isBot)
     {
-        $botDetector = Mockery::mock(BotDetector::class);
-        $botDetector->shouldReceive('is_bot')->andReturn($isBot);
-        return $botDetector;
+        $htmxHandler = Mockery::mock('WP_Swapper\Handlers\Htmx_Handler')->makePartial();
+        $htmxHandler->shouldReceive('is_bot')->andReturn($isBot);
+        return $htmxHandler;
     }
 
     /**
@@ -39,8 +38,7 @@ class HtmxHandlerTest extends TestCase
     */
     private function runAddHtmxAttributesToBodyTest($isBot, $expectedOutput)
     {
-        $botDetector = $this->mockBotDetector($isBot);
-        $htmxHandler = new HtmxHandler($botDetector);
+        $htmxHandler = $this->mockBotDetector($isBot);
 
         $classes = ['class1', 'class2'];
 
@@ -59,9 +57,7 @@ class HtmxHandlerTest extends TestCase
     */
     public function testConstructorAddsFilter()
     {
-        $botDetector = $this->mockBotDetector(false);
-
-        $htmxHandler = new HtmxHandler($botDetector);
+        $htmxHandler = new Htmx_Handler();
         $this->assertNotFalse(has_filter('body_class', [$htmxHandler, 'add_htmx_attributes_to_body'], 20, 2));
     }
 
