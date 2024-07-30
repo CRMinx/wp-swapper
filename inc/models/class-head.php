@@ -5,7 +5,7 @@ namespace WP_Swapper\Models;
 use DOMDocument;
 
 /**
-* Class to handle head component
+* Class to handle head model
 *
 * @since 0.1
 */

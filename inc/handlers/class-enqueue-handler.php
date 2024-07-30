@@ -7,7 +7,6 @@ namespace WP_Swapper\Handlers;
 *
 * @since 0.0.1
 */
-
 class Enqueue_Handler {
     /**
     * Constructor

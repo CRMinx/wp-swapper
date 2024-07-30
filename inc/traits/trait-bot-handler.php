@@ -3,7 +3,7 @@
 namespace WP_Swapper\Traits;
 
 /**
-* Class to detect search engine bots
+* Trait to detect search engine bots
 *
 * @since 0.1
 */

@@ -12,7 +12,11 @@ class Content_Processor {
     /**
     * Process the content and edit the DOM
     *
-    * @param string $content
+    * @since 0.0.1
+    *
+    * @param string $content the buffer
+    * @param array $views component views
+    *
     * @return string Processed content
     */
     public function process_content($content, $views) {
@@ -33,7 +37,7 @@ class Content_Processor {
             $content = $this->remove_content_wrapper($content);
 
             foreach ($views as $view) {
-                $content .= $view->render();
+                $content .= $view;
             }
         }
 

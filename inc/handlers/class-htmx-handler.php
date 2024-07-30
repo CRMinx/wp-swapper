@@ -17,8 +17,6 @@ class Htmx_Handler {
     * Constructor
     *
     * @since 0.0.1
-    *
-    * @param BotDetector $bot_detector
     */
     public function __construct() {
         add_filter('body_class', [$this, 'add_htmx_attributes_to_body'], 20, 2);

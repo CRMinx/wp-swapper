@@ -2,6 +2,11 @@
 
 namespace WP_Swapper\Handlers;
 
+/**
+* Class for opening and closing buffers
+*
+* @since 0.0.1
+*/
 class Buffer_Handler {
     /**
     * Start the output buffer

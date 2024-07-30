@@ -4,6 +4,11 @@ namespace WP_Swapper\Models;
 
 use WP_Swapper\Traits\Cache_Handler;
 
+/**
+* Abstract class for interacting with models
+*
+* @since 0.0.1
+*/
 abstract class Model
 {
     use Cache_Handler;

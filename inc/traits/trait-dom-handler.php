@@ -2,6 +2,11 @@
 
 namespace WP_Swapper\Traits;
 
+/**
+* Trait for interacting with DOM Elements
+*
+* @since 0.0.1
+*/
 trait Dom_Handler {
 
     /**

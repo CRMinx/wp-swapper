@@ -5,7 +5,7 @@ namespace WP_Swapper\Models;
 use DOMDocument;
 
 /**
-* Class to handle footer component
+* Class to handle footer model
 *
 * @since 0.1
 */

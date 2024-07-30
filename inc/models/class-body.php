@@ -5,7 +5,7 @@ namespace WP_Swapper\Models;
 use DOMDocument;
 
 /**
-* Class to handle body component
+* Class to handle body model
 *
 * @since 0.1
 */
