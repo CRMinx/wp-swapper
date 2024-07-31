@@ -28,6 +28,7 @@ class TestCase extends PHPUnitTestCase
         Monkey\setUp();
 
         Functions\when('esc_url')->returnArg();
+        Functions\when('wp_swapper_get_loading_icon')->justReturn('<div>Loading...</div>');
     }
 
     /**
