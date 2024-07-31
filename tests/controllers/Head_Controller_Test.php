@@ -1,15 +1,16 @@
 <?php
 
-namespace WP_Swapper\Tests;
+namespace WP_Swapper\Tests\Controllers;
 
-use WP_Swapper\Controllers\Header_Controller;
+use WP_Swapper\Controllers\Head_Controller;
 
 /**
-* Class for testing the Header Controller
+* Class for testing the head controller
 *
 * @since 0.0.1
 */
-class Header_Controller_Test extends Base_Controller_Test {
+class Head_Controller_Test extends Base_Controller_Test {
+
     /**
     * The Initial content
     *
@@ -17,7 +18,7 @@ class Header_Controller_Test extends Base_Controller_Test {
     *
     * @var string
     */
-    protected $initial_content = '<header>Initial Content</header>';
+    protected $initial_content = '<html><head><link /></head><body></body></html>';
 
     /**
     * The new content
@@ -26,7 +27,7 @@ class Header_Controller_Test extends Base_Controller_Test {
     *
     * @var string
     */
-    protected $new_content = '<header>Updated Content</header>';
+    protected $new_content = '<html><head><link /><script></script></head><body></body></html>';
 
     /**
     * The component name
@@ -35,32 +36,33 @@ class Header_Controller_Test extends Base_Controller_Test {
     *
     * @var string used in the header
     */
-    protected $component_name = 'Header';
+    protected $component_name = 'Head';
 
     /**
-    * Provide the Header_Controller class for testing
+    * Provide the Head_Controller class for testing
     *
     * @since 0.0.1
     *
     * @param string $content
     *
-    * @return Header_Controller
+    * @return Head_Controller
     */
     protected function get_controller($content) {
-        return new Header_Controller($content);
+        return new Head_Controller($content);
     }
+
     /**
-    * Test the returned view of header component
+    * Test the returned view of head component
     *
     * @since 0.0.1
     *
     * @runInSeparateProcess
     */
     public function testView() {
-        $controller = new Header_Controller($this->initial_content);
+        $controller = new Head_Controller($this->initial_content);
 
         if ($controller->render() !== '') {
-            $expectedId = 'id="changed-header"';
+            $expectedId = 'changed-head';
             $this->assertStringContainsString($expectedId, $controller->render(), 'View should contain the correct Id');
         }
     }

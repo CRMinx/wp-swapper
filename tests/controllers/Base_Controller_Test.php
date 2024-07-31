@@ -1,6 +1,8 @@
 <?php
 
-namespace WP_Swapper\Tests;
+namespace WP_Swapper\Tests\Controllers;
+
+use WP_Swapper\Tests\TestCase;
 
 /**
 * abstract base class for teseting controllers

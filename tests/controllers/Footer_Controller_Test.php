@@ -1,16 +1,15 @@
 <?php
 
-namespace WP_Swapper\Tests;
+namespace WP_Swapper\Tests\Controllers;
 
-use WP_Swapper\Controllers\Head_Controller;
+use WP_Swapper\Controllers\Footer_Controller;
 
 /**
-* Class for testing the head controller
+* Class for testing the Footer Controller
 *
 * @since 0.0.1
 */
-class Head_Controller_Test extends Base_Controller_Test {
-
+class Footer_Controller_Test extends Base_Controller_Test {
     /**
     * The Initial content
     *
@@ -18,7 +17,7 @@ class Head_Controller_Test extends Base_Controller_Test {
     *
     * @var string
     */
-    protected $initial_content = '<html><head><link /></head><body></body></html>';
+    protected $initial_content = '<footer>Initial Content</footer>';
 
     /**
     * The new content
@@ -27,7 +26,7 @@ class Head_Controller_Test extends Base_Controller_Test {
     *
     * @var string
     */
-    protected $new_content = '<html><head><link /><script></script></head><body></body></html>';
+    protected $new_content = '<footer>Updated Content</footer>';
 
     /**
     * The component name
@@ -36,33 +35,32 @@ class Head_Controller_Test extends Base_Controller_Test {
     *
     * @var string used in the header
     */
-    protected $component_name = 'Head';
+    protected $component_name = 'Footer';
 
     /**
-    * Provide the Head_Controller class for testing
+    * Provide the Footer_Controller class for testing
     *
     * @since 0.0.1
     *
     * @param string $content
     *
-    * @return Head_Controller
+    * @return Footer_Controller
     */
     protected function get_controller($content) {
-        return new Head_Controller($content);
+        return new Footer_Controller($content);
     }
-
     /**
-    * Test the returned view of head component
+    * Test the returned view of footer component
     *
     * @since 0.0.1
     *
     * @runInSeparateProcess
     */
     public function testView() {
-        $controller = new Head_Controller($this->initial_content);
+        $controller = new Footer_Controller($this->initial_content);
 
         if ($controller->render() !== '') {
-            $expectedId = 'changed-head';
+            $expectedId = 'id="changed-footer"';
             $this->assertStringContainsString($expectedId, $controller->render(), 'View should contain the correct Id');
         }
     }

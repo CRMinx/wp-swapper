@@ -1,9 +1,10 @@
 <?php
 
-namespace WP_Swapper\Tests;
+namespace WP_Swapper\Tests\Handlers;
 
 use Brain\Monkey\Functions;
 use WP_Swapper\Handlers\Enqueue_Handler;
+use WP_Swapper\Tests\TestCase;
 
 /**
 * Test Enqueue Scripts

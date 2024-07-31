@@ -1,8 +1,9 @@
 <?php
 
-namespace WP_Swapper\Tests;
+namespace WP_Swapper\Tests\Handlers;
 
 use WP_Swapper\Handlers\Htmx_Handler;
+use WP_Swapper\Tests\TestCase;
 use Mockery;
 
 /**

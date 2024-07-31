@@ -1,6 +1,6 @@
 <?php
 
-namespace WP_Swapper\Tests;
+namespace WP_Swapper\Tests\Controllers;
 
 use WP_Swapper\Controllers\Scripts_Controller;
 
