@@ -4,71 +4,51 @@ namespace WP_Swapper\Tests;
 
 use WP_Swapper\Controllers\Head_Controller;
 
-class Head_Controller_Test extends TestCase {
-
-    private $initial_content = '<html><head><link /></head><body></body></html>';
+/**
+* Class for testing the head controller
+*
+* @since 0.0.1
+*/
+class Head_Controller_Test extends Base_Controller_Test {
 
     /**
-    * Component should render if it has changed
+    * The Initial content
     *
     * @since 0.0.1
     *
-    * @runInSeparateProcess
+    * @var string
     */
-    public function testComponentChanged() {
-        $controller = new Head_Controller($this->initial_content);
-
-        $this->assertTrue($controller->render() !== '', 'Component should render if it has changed');
-    }
+    protected $initial_content = '<html><head><link /></head><body></body></html>';
 
     /**
-    * Component should not render if it doesn't change
+    * The new content
     *
     * @since 0.0.1
     *
-    * @runInSeparateProcess
+    * @var string
     */
-    public function testComponentNotChanged() {
-        $controller = new Head_Controller($this->initial_content);
-        $controller = new Head_Controller($this->initial_content);
-
-        $this->assertTrue($controller->render() === '', 'Component should not render if no changes');
-    }
+    protected $new_content = '<html><head><link /><script></script></head><body></body></html>';
 
     /**
-    * Test against cache to see if component changed
+    * The component name
     *
     * @since 0.0.1
     *
-    * @runInSeparateProcess
+    * @var string used in the header
     */
-    public function testCacheComponent() {
-        $controller = new Head_Controller($this->initial_content);
-
-        $this->assertTrue($controller->render() !== '', 'Component should render if it has changed');
-
-        // Update the content
-        $newContent = '<html><head><link /><script></script></head><body></body></html>';
-        $controller = new Head_Controller($newContent);
-        $this->assertTrue($controller->render() !== '', 'Component should render if it has changed');
-    }
+    protected $component_name = 'Head';
 
     /**
-    * If component changes, header should be created
+    * Provide the Head_Controller class for testing
     *
     * @since 0.0.1
     *
-    * @runInSeparateProcess
+    * @param string $content
+    *
+    * @return Head_Controller
     */
-    public function testCreateHeader() {
-        $controller = new Head_Controller($this->initial_content);
-
-        ob_start();
-        $controller->render();
-        ob_end_clean();
-
-        $headers = xdebug_get_headers();
-        $this->assertContains('X-Component-Changed-Head: true', $headers, 'header should be set when component changes.');
+    protected function get_controller($content) {
+        return new Head_Controller($content);
     }
 
     /**

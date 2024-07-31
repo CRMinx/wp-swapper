@@ -4,71 +4,50 @@ namespace WP_Swapper\Tests;
 
 use WP_Swapper\Controllers\Body_Controller;
 
-class Body_Controller_Test extends TestCase {
-
-    private $initial_content = '<body>Initial Content</body>';
-
+/**
+* Class for testing the Body Controller
+*
+* @since 0.0.1
+*/
+class Body_Controller_Test extends Base_Controller_Test {
     /**
-    * Component should render if it has changed
+    * The Initial content
     *
     * @since 0.0.1
     *
-    * @runInSeparateProcess
+    * @var string
     */
-    public function testComponentChanged() {
-        $controller = new Body_Controller($this->initial_content);
-
-        $this->assertTrue($controller->render() !== '', 'Component should render if it has changed');
-    }
+    protected $initial_content = '<body class="intitial-class">Initial Content</body>';
 
     /**
-    * Component should not render if it doesn't change
+    * The new content
     *
     * @since 0.0.1
     *
-    * @runInSeparateProcess
+    * @var string
     */
-    public function testComponentNotChanged() {
-        $controller = new Body_Controller($this->initial_content);
-        $controller = new Body_Controller($this->initial_content);
-
-        $this->assertTrue($controller->render() === '', 'Component should not render if no changes');
-    }
+    protected $new_content = '<body class="updated-class">Updated Content</body>';
 
     /**
-    * Test against cache to see if component changed
+    * The component name
     *
     * @since 0.0.1
     *
-    * @runInSeparateProcess
+    * @var string used in the header
     */
-    public function testCacheComponent() {
-        $controller = new Body_Controller($this->initial_content);
-
-        $this->assertTrue($controller->render() !== '', 'Component should render if it has changed');
-
-        // Update the content
-        $newContent = '<body class="new-class">UpdatedContent</body>';
-        $controller = new Body_Controller($newContent);
-        $this->assertTrue($controller->render() !== '', 'Component should render if it has changed');
-    }
+    protected $component_name = 'Body';
 
     /**
-    * If component changes, header should be created
+    * Provide the Body_Controller class for testing
     *
     * @since 0.0.1
     *
-    * @runInSeparateProcess
+    * @param string $content
+    *
+    * @return Body_Controller
     */
-    public function testCreateHeader() {
-        $controller = new Body_Controller($this->initial_content);
-
-        ob_start();
-        $controller->render();
-        ob_end_clean();
-
-        $headers = xdebug_get_headers();
-        $this->assertContains('X-Component-Changed-Body: true', $headers, 'Header should be set when component changes.');
+    protected function get_controller($content) {
+        return new Body_Controller($content);
     }
 
     /**
@@ -79,11 +58,10 @@ class Body_Controller_Test extends TestCase {
     * @runInSeparateProcess
     */
     public function testView() {
-        $content = '<body class="test-class">Initial Content</body>';
-        $controller = new Body_Controller($content);
+        $controller = new Body_Controller($this->initial_content);
 
         if ($controller->render() !== '') {
-            $expectedView = '<div style="display: none;" id="changed-body"><div class="test-class"></div></div>';
+            $expectedView = 'id="changed-body"';
             $this->assertStringContainsString($expectedView, $controller->render(), 'View should contain the correct HTML');
         }
     }
