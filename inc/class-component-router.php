@@ -98,9 +98,13 @@ class Component_Router {
      * @return array of views
      */
     private function views($controllers) {
+        $views = [];
+
         foreach ($controllers as $controller) {
-            return $controller->render();
+            $views[] = $controller->render();
         }
+
+        return $views;
     }
 
     /**
