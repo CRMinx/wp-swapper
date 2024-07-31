@@ -1,8 +1,9 @@
 <?php
 
-namespace WP_Swapper\Tests;
+namespace WP_Swapper\Tests\Handlers;
 
 use WP_Swapper\Handlers\Buffer_Handler;
+use WP_Swapper\Tests\TestCase;
 
 /**
 * Tests for Buffer Handler class
